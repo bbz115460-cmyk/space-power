@@ -9,69 +9,232 @@
   :root{--bg:#071023;--card:#0b1220;--muted:#94a3b8;--accent:#06b6d4}
   [data-theme="light"]{--bg:#f4f7fb;--card:#ffffff;--muted:#5b6470;--accent:#067fbf;color:#0b1220}
   [data-theme="rgb"]{--bg:linear-gradient(90deg,#ff4e50,#f9d423,#1fa2ff);--card:rgba(255,255,255,0.06);--muted:#fff;--accent:#fff;color:#fff}
-  body{margin:0;background:var(--bg);color:var(--color, #e6eef6);font-family:Inter,system-ui,Arial,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:18px}
-  .card{width:100%;max-width:720px;background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
-  h1{margin:0 0 10px;font-size:20px}
-  .row{display:flex;gap:10px;align-items:center}
-  input[type="text"]{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-  #countBox{background:#fff;color:#000;padding:10px 18px;border-radius:10px;font-size:44px;min-width:80px;text-align:center;transition:width .12s;display:inline-block}
-  #spaceBtn{padding:14px 26px;border-radius:10px;background:var(--accent);color:#022;font-weight:700;border:none;cursor:pointer;transition:0.2s}
-  .controls{display:flex;gap:8px;margin-top:12px}
-  button{padding:10px 12px;border-radius:8px;border:none;cursor:pointer}
-  .hint{font-size:13px;color:var(--muted);margin-top:10px}
-  .modal-bg{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:flex;align-items:center;justify-content:center;z-index:50}
-  .modal{background:var(--card);padding:16px;border-radius:10px;width:100%;max-width:420px;position:relative}
-  .close-x{position:absolute;top:8px;right:10px;background:transparent;border:0;color:var(--muted);font-weight:700;font-size:18px;cursor:pointer}
-  .error{color:#ff6b6b;font-size:13px;margin-top:6px;display:none}
-  .leaderboard{margin-top:12px;max-height:180px;overflow:auto}
-  .top-item{display:flex;justify-content:space-between;padding:6px 8px;border-radius:6px;margin-bottom:6px;background:linear-gradient(90deg,rgba(255,255,255,0.01),transparent)}
-  #resultModal .modal{max-width:680px}
+  [data-theme="neon"]{--bg:#0a0a16;--card:#121230;--muted:#a0a0ff;--accent:#00f7ff;color:#e6f7ff}
+  [data-theme="matrix"]{--bg:#000;--card:#001100;--muted:#00ff41;--accent:#00ff41;color:#00ff41}
+  
+  body{margin:0;background:var(--bg);color:var(--color, #e6eef6);font-family:'Segoe UI', system-ui, Arial, sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:18px;transition:all 0.3s ease}
+  .card{width:100%;max-width:900px;background:var(--card);padding:24px;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.05);position:relative;overflow:hidden}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--accent);border-radius:16px 16px 0 0}
+  
+  h1{margin:0 0 15px;font-size:28px;font-weight:800;text-align:center;background:linear-gradient(90deg, var(--accent), #a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(6,182,212,0.3)}
+  
+  .header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+  
+  .row{display:flex;gap:12px;align-items:center;margin-bottom:15px}
+  input[type="text"]{flex:1;padding:12px 15px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:inherit;font-size:16px;transition:all 0.2s}
+  input[type="text"]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(6,182,212,0.2)}
+  
+  #countBox{background:linear-gradient(145deg, var(--accent), #0ea5e9);color:#fff;padding:20px 30px;border-radius:16px;font-size:64px;font-weight:800;min-width:120px;text-align:center;transition:all 0.15s;display:inline-block;box-shadow:0 8px 25px rgba(6,182,212,0.3);text-shadow:0 2px 10px rgba(0,0,0,0.2);border:2px solid rgba(255,255,255,0.1)}
+  
+  .controls-main{display:flex;gap:15px;margin-top:25px;justify-content:center;flex-wrap:wrap}
+  #spaceBtn{padding:20px 40px;border-radius:14px;background:linear-gradient(145deg, var(--accent), #0ea5e9);color:#022;font-weight:800;border:none;cursor:pointer;transition:0.2s;font-size:20px;box-shadow:0 8px 20px rgba(6,182,212,0.4);text-transform:uppercase;letter-spacing:1px;min-width:180px}
+  #spaceBtn:hover{transform:translateY(-3px);box-shadow:0 12px 25px rgba(6,182,212,0.5)}
+  #spaceBtn:active{transform:translateY(1px)}
+  
+  .controls-secondary{display:flex;gap:12px;margin-top:15px;justify-content:center;flex-wrap:wrap}
+  button{padding:12px 20px;border-radius:10px;border:none;cursor:pointer;font-weight:600;transition:all 0.2s;font-size:15px}
+  #startBtn{background:linear-gradient(145deg, #10b981, #059669);color:#fff;box-shadow:0 5px 15px rgba(16,185,129,0.3)}
+  #endBtn{background:linear-gradient(145deg, #ef4444, #dc2626);color:#fff;box-shadow:0 5px 15px rgba(239,68,68,0.3)}
+  #startBtn:hover, #endBtn:hover{transform:translateY(-2px)}
+  #startBtn:active, #endBtn:active{transform:translateY(1px)}
+  
+  .hint{font-size:14px;color:var(--muted);margin-top:15px;text-align:center;padding:10px;background:rgba(255,255,255,0.03);border-radius:8px}
+  
+  .modal-bg{position:fixed;inset:0;background:rgba(2,6,23,0.8);display:flex;align-items:center;justify-content:center;z-index:50;backdrop-filter:blur(5px)}
+  .modal{background:var(--card);padding:24px;border-radius:16px;width:100%;max-width:500px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1)}
+  .close-x{position:absolute;top:12px;right:15px;background:transparent;border:0;color:var(--muted);font-weight:700;font-size:22px;cursor:pointer;padding:5px;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+  .close-x:hover{background:rgba(255,255,255,0.1);color:#fff}
+  .error{color:#ff6b6b;font-size:14px;margin-top:8px;display:none}
+  .leaderboard{margin-top:15px;max-height:280px;overflow:auto;border-radius:10px;background:rgba(255,255,255,0.02);padding:10px}
+  .top-item{display:flex;justify-content:space-between;padding:10px 12px;border-radius:8px;margin-bottom:8px;background:linear-gradient(90deg,rgba(255,255,255,0.03),transparent);transition:all 0.2s;align-items:center}
+  .top-item:hover{background:linear-gradient(90deg,rgba(255,255,255,0.08),transparent);transform:translateX(5px)}
+  .top-item .rank{font-weight:700;color:var(--accent);min-width:30px}
+  .top-item .name{flex:1;display:flex;align-items:center;gap:8px}
+  .top-item .score{font-weight:700;color:var(--accent)}
+  .flag{width:20px;height:15px;border-radius:2px;box-shadow:0 0 3px rgba(0,0,0,0.3)}
+  #resultModal .modal{max-width:700px}
   .confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100}
-  .confetti-piece{position:absolute;width:10px;height:10px;background:#ff0;opacity:0}
-  @media(max-width:640px){#countBox{font-size:36px}}
+  .confetti-piece{position:absolute;width:12px;height:12px;background:#ff0;opacity:0;border-radius:50%}
+  
+  .stats-bar{display:flex;justify-content:space-around;margin:20px 0;padding:15px;background:rgba(255,255,255,0.03);border-radius:12px;flex-wrap:wrap;gap:10px}
+  .stat-item{text-align:center}
+  .stat-value{font-size:24px;font-weight:700;color:var(--accent)}
+  .stat-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  
+  .theme-selector{display:flex;gap:8px;align-items:center}
+  .theme-btn{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+  .theme-btn.active{border-color:#fff;transform:scale(1.2)}
+  .theme-btn[data-theme="dark"]{background:#071023}
+  .theme-btn[data-theme="light"]{background:#f4f7fb}
+  .theme-btn[data-theme="rgb"]{background:linear-gradient(90deg,#ff4e50,#f9d423,#1fa2ff)}
+  .theme-btn[data-theme="neon"]{background:#0a0a16;box-shadow:0 0 10px #00f7ff}
+  .theme-btn[data-theme="matrix"]{background:#000;box-shadow:0 0 10px #00ff41}
+  
+  .achievement-badge{position:absolute;top:20px;right:20px;background:gold;color:#000;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:700;animation:pulse 2s infinite}
+  @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+  
+  .particles{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+  .particle{position:absolute;background:var(--accent);border-radius:50%;opacity:0.3}
+  
+  /* NEW STYLES FOR ADDED FEATURES */
+  .features-bar{display:flex;justify-content:center;gap:15px;margin:15px 0;flex-wrap:wrap}
+  .feature-btn{background:rgba(255,255,255,0.08);color:inherit;border:none;padding:10px 15px;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;font-size:14px}
+  .feature-btn:hover{background:rgba(255,255,255,0.12);transform:translateY(-2px)}
+  
+  .achievements-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:10px;margin-top:15px;max-height:200px;overflow-y:auto}
+  .achievement-item{padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;display:flex;align-items:center;gap:10px}
+  .achievement-icon{width:30px;height:30px;background:gold;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
+  .achievement-info{flex:1}
+  .achievement-title{font-weight:600;font-size:13px}
+  .achievement-desc{font-size:11px;color:var(--muted)}
+  .achievement-progress{height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:5px;overflow:hidden}
+  .achievement-progress-bar{height:100%;background:var(--accent);transition:width 0.3s}
+  
+  .daily-challenge{background:linear-gradient(145deg, #f59e0b, #d97706);padding:15px;border-radius:12px;margin:15px 0;text-align:center}
+  .challenge-title{font-weight:700;margin-bottom:5px}
+  .challenge-desc{font-size:14px;margin-bottom:10px}
+  .challenge-progress{display:flex;justify-content:space-between;align-items:center}
+  .challenge-bar{flex:1;height:8px;background:rgba(0,0,0,0.2);border-radius:4px;margin:0 10px;overflow:hidden}
+  .challenge-progress-inner{height:100%;background:#fff;transition:width 0.3s}
+  
+  .social-share{display:flex;justify-content:center;gap:10px;margin-top:15px}
+  .share-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:18px}
+  .share-btn.twitter{background:#1da1f2}
+  .share-btn.whatsapp{background:#25d366}
+  .share-btn.facebook{background:#1877f2}
+  .share-btn.link{background:var(--accent)}
+  
+  .sound-toggle{position:absolute;top:15px;left:15px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:all 0.2s}
+  .sound-toggle:hover{background:rgba(255,255,255,0.2)}
+  
+  .notification{position:fixed;top:20px;right:20px;background:var(--card);padding:15px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.3);z-index:1000;display:flex;align-items:center;gap:10px;transform:translateX(150%);transition:transform 0.3s}
+  .notification.show{transform:translateX(0)}
+  .notification-icon{width:30px;height:30px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px}
+  
+  @media(max-width:640px){
+    .card{padding:18px}
+    h1{font-size:24px}
+    #countBox{font-size:48px;padding:15px 25px}
+    #spaceBtn{padding:16px 30px;font-size:18px;min-width:150px}
+    .header-row{flex-direction:column;align-items:flex-start}
+    .stats-bar{gap:15px}
+    .features-bar{gap:10px}
+    .achievements-grid{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body data-theme="dark">
 
 <div class="card" role="main" aria-label="Space Power">
-  <h1>Space Power</h1>
+  <div class="particles" id="particles"></div>
+  
+  <!-- Sound Toggle -->
+  <button class="sound-toggle" id="soundToggle" title="Toggle Sound">🔊</button>
+  
+  <h1>🚀 Space Power Tracker</h1>
 
-  <!-- theme + optional settings -->
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-    <div style="display:flex;gap:8px;align-items:center">
-      <label style="font-size:13px;color:var(--muted)">Theme</label>
-      <select id="themeSelect" style="padding:6px;border-radius:6px">
-        <option value="dark">Dark</option>
-        <option value="light">Light</option>
-        <option value="rgb">RGB</option>
-      </select>
+  <!-- Theme selector -->
+  <div class="header-row">
+    <div class="theme-selector">
+      <div class="theme-btn active" data-theme="dark" title="Dark Theme"></div>
+      <div class="theme-btn" data-theme="light" title="Light Theme"></div>
+      <div class="theme-btn" data-theme="rgb" title="RGB Theme"></div>
+      <div class="theme-btn" data-theme="neon" title="Neon Theme"></div>
+      <div class="theme-btn" data-theme="matrix" title="Matrix Theme"></div>
     </div>
-    <div style="font-size:13px;color:var(--muted)">Space Power — press tracker</div>
+    <div style="font-size:14px;color:var(--muted);display:flex;align-items:center;gap:5px">
+      <span>🔥 Trending Worldwide</span>
+    </div>
   </div>
 
   <!-- name row -->
   <div class="row">
-    <label style="min-width:70px;color:var(--muted)">Name</label>
-    <input id="mainName" placeholder="(optional) — enter to be in global top"/>
-    <button id="prefillBtn" title="Fill last named">Load last</button>
+    <label style="min-width:70px;color:var(--muted);font-weight:600">Player Name</label>
+    <input id="mainName" placeholder="Enter your name for global ranking"/>
+    <button id="prefillBtn" title="Fill last named" style="background:rgba(255,255,255,0.1);color:inherit">Load Last</button>
   </div>
 
-  <div style="text-align:center;margin-top:18px">
+  <!-- Daily Challenge -->
+  <div class="daily-challenge" id="dailyChallenge">
+    <div class="challenge-title">🎯 Daily Challenge</div>
+    <div class="challenge-desc" id="challengeDesc">Score 50 points in 30 seconds</div>
+    <div class="challenge-progress">
+      <span id="challengeProgressText">0/50</span>
+      <div class="challenge-bar">
+        <div class="challenge-progress-inner" id="challengeProgressBar" style="width:0%"></div>
+      </div>
+      <span id="challengeTime">30s</span>
+    </div>
+  </div>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-value" id="statPresses">0</div>
+      <div class="stat-label">Total Presses</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="statRate">0.0</div>
+      <div class="stat-label">Presses/Sec</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="statTime">0s</div>
+      <div class="stat-label">Time</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="statRank">-</div>
+      <div class="stat-label">Your Rank</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:10px">
     <div id="countBox">0</div>
   </div>
 
-  <div class="controls" style="justify-content:center;margin-top:12px">
-    <button id="spaceBtn">SPACE</button>
-    <button id="startBtn" style="background:#10b981;color:#012">Start</button>
-    <button id="endBtn" disabled style="background:#ef4444;color:#fff">End</button>
+  <!-- Feature Buttons -->
+  <div class="features-bar">
+    <button class="feature-btn" id="achievementsBtn">🏆 Achievements</button>
+    <button class="feature-btn" id="shareBtn">📤 Share Score</button>
+    <button class="feature-btn" id="historyBtn">📊 My History</button>
+    <button class="feature-btn" id="helpBtn">❓ How to Play</button>
   </div>
 
-  <div class="hint">Press the <strong>SPACE</strong> key or tap the SPACE button. Hold will NOT increase count — press repeatedly.</div>
+  <!-- Main Controls - Space button centered -->
+  <div class="controls-main">
+    <button id="spaceBtn">🎯 PRESS SPACE</button>
+  </div>
+
+  <!-- Secondary Controls - Start/End below Space -->
+  <div class="controls-secondary">
+    <button id="startBtn" style="background:linear-gradient(145deg, #10b981, #059669);color:#fff;">▶ Start Game</button>
+    <button id="endBtn" disabled style="background:linear-gradient(145deg, #ef4444, #dc2626);color:#fff;">⏹ End Game</button>
+    <button id="resetBtn" style="background:rgba(255,255,255,0.1);color:inherit;">🔄 Reset</button>
+  </div>
+
+  <div class="hint">Press the <strong>SPACE</strong> key or tap the SPACE button. Hold will NOT increase count — press repeatedly for maximum speed!</div>
+
+  <!-- Achievements Preview -->
+  <div style="margin-top:20px;display:none" id="achievementsSection">
+    <strong style="font-size:16px">🎖 Your Achievements</strong>
+    <div class="achievements-grid" id="achievementsGrid"></div>
+  </div>
 
   <!-- local leaderboard preview -->
-  <div style="margin-top:14px">
-    <strong class="small">Local Top (named)</strong>
+  <div style="margin-top:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="font-size:16px">🏆 Global Top 10</strong>
+      <button id="refreshLeaderboard" style="background:rgba(255,255,255,0.05);color:inherit;padding:6px 10px;font-size:12px">Refresh</button>
+    </div>
     <div class="leaderboard" id="leaderboardPreview"></div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notification" id="notification">
+  <div class="notification-icon">🎉</div>
+  <div>
+    <div id="notificationTitle">Achievement Unlocked!</div>
+    <div id="notificationDesc" style="font-size:12px;color:var(--muted)">You unlocked an achievement</div>
   </div>
 </div>
 
@@ -79,12 +242,12 @@
 <div id="nameModal" class="modal-bg" style="display:none">
   <div class="modal" role="dialog">
     <button class="close-x" id="modalX">✕</button>
-    <h3>Enter your name (optional)</h3>
-    <p style="font-size:13px;color:var(--muted)">If you want your score visible in global top-10, enter a name and press Start. Otherwise press ✕ to skip.</p>
-    <input id="modalInput" placeholder="Your name"/>
+    <h3 style="margin-top:0">Enter Your Name</h3>
+    <p style="font-size:14px;color:var(--muted)">Enter your name to appear in the global leaderboard. Or press ✕ to play anonymously.</p>
+    <input id="modalInput" placeholder="Your name" style="width:100%;box-sizing:border-box"/>
     <div class="error" id="modalError">Please enter a name or press ✕ to skip.</div>
-    <div style="text-align:right;margin-top:10px">
-      <button id="modalStart" style="background:#10b981;color:#012;padding:8px 12px;border-radius:8px">Start</button>
+    <div style="text-align:right;margin-top:15px">
+      <button id="modalStart" style="background:linear-gradient(145deg, #10b981, #059669);color:#fff;padding:10px 20px;border-radius:8px;font-weight:600">Start Game</button>
     </div>
   </div>
 </div>
@@ -93,15 +256,28 @@
 <div id="resultModal" class="modal-bg" style="display:none">
   <div class="modal" role="dialog">
     <button class="close-x" id="resultClose">✕</button>
-    <h3>Result</h3>
-    <div style="display:flex;gap:12px;flex-direction:column">
-      <div style="display:flex;justify-content:space-between"><div class="small">Name</div><div id="resName"></div></div>
-      <div style="display:flex;justify-content:space-between"><div class="small">Total presses</div><div id="resPresses"></div></div>
-      <div style="display:flex;justify-content:space-between"><div class="small">Time</div><div id="resTime"></div></div>
-      <div style="display:flex;justify-content:space-between"><div class="small">Your world rank</div><div id="resRank"></div></div>
-      <div style="margin-top:6px"><strong>Top 1–10 (named)</strong></div>
+    <h3 style="margin-top:0">🎊 Game Results</h3>
+    <div style="display:flex;gap:15px;flex-direction:column">
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><div style="font-weight:600">Player Name</div><div id="resName"></div></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><div style="font-weight:600">Total Presses</div><div id="resPresses"></div></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><div style="font-weight:600">Time</div><div id="resTime"></div></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><div style="font-weight:600">Presses Per Second</div><div id="resRate"></div></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0"><div style="font-weight:600">Global Rank</div><div id="resRank"></div></div>
+      
+      <!-- Social Share in Result Modal -->
+      <div style="text-align:center;margin:10px 0">
+        <strong>Share your score!</strong>
+        <div class="social-share">
+          <div class="share-btn twitter" onclick="shareScore('twitter')">🐦</div>
+          <div class="share-btn whatsapp" onclick="shareScore('whatsapp')">💬</div>
+          <div class="share-btn facebook" onclick="shareScore('facebook')">📘</div>
+          <div class="share-btn link" onclick="copyScoreLink()">🔗</div>
+        </div>
+      </div>
+      
+      <div style="margin-top:10px"><strong style="font-size:16px">🏆 Global Top 10</strong></div>
       <div id="leaderboard" class="leaderboard"></div>
-      <canvas id="resultChart" style="margin-top:10px;display:none"></canvas>
+      <canvas id="resultChart" style="margin-top:15px;display:none;background:rgba(255,255,255,0.02);border-radius:8px;padding:10px"></canvas>
     </div>
   </div>
 </div>
@@ -113,13 +289,17 @@
 <script>
 /* CONFIG */
 const API_ENDPOINT = ''; // optional: your server URL to POST final results
-const STORAGE_KEY = 'sp_submissions_v1';
-const QUEUE_KEY = 'sp_queue_v1';
-const LAST_NAME_KEY = 'sp_last_name';
+const STORAGE_KEY = 'sp_submissions_v3';
+const QUEUE_KEY = 'sp_queue_v3';
+const LAST_NAME_KEY = 'sp_last_name_v3';
+const ACHIEVEMENTS_KEY = 'sp_achievements_v3';
+const DAILY_CHALLENGE_KEY = 'sp_daily_challenge_v3';
 
 /* STATE */
 let playing=false, count=0, startTime=0, stamps=[], lastSpace=false;
-let lastClickTs=0, lastSaveTs=0;
+let lastClickTs=0, lastSaveTs=0, timerInterval=null;
+let soundEnabled = true;
+let dailyChallenge = null;
 
 /* DOM */
 const modal = document.getElementById('nameModal');
@@ -133,6 +313,7 @@ const countBox = document.getElementById('countBox');
 const spaceBtn = document.getElementById('spaceBtn');
 const startBtn = document.getElementById('startBtn');
 const endBtn = document.getElementById('endBtn');
+const resetBtn = document.getElementById('resetBtn');
 const leaderboardEl = document.getElementById('leaderboard');
 const leaderboardPreview = document.getElementById('leaderboardPreview');
 const resultModal = document.getElementById('resultModal');
@@ -140,15 +321,174 @@ const resultClose = document.getElementById('resultClose');
 const resName = document.getElementById('resName');
 const resPresses = document.getElementById('resPresses');
 const resTime = document.getElementById('resTime');
+const resRate = document.getElementById('resRate');
 const resRank = document.getElementById('resRank');
-const themeSelect = document.getElementById('themeSelect');
 const resultChart = document.getElementById('resultChart');
 const confettiContainer = document.getElementById('confettiContainer');
+const refreshLeaderboard = document.getElementById('refreshLeaderboard');
+const statPresses = document.getElementById('statPresses');
+const statRate = document.getElementById('statRate');
+const statTime = document.getElementById('statTime');
+const statRank = document.getElementById('statRank');
+const particlesEl = document.getElementById('particles');
+const soundToggle = document.getElementById('soundToggle');
+const achievementsBtn = document.getElementById('achievementsBtn');
+const achievementsSection = document.getElementById('achievementsSection');
+const achievementsGrid = document.getElementById('achievementsGrid');
+const shareBtn = document.getElementById('shareBtn');
+const dailyChallengeEl = document.getElementById('dailyChallenge');
+const challengeDesc = document.getElementById('challengeDesc');
+const challengeProgressText = document.getElementById('challengeProgressText');
+const challengeProgressBar = document.getElementById('challengeProgressBar');
+const challengeTime = document.getElementById('challengeTime');
+const notification = document.getElementById('notification');
+const notificationTitle = document.getElementById('notificationTitle');
+const notificationDesc = document.getElementById('notificationDesc');
 
-/* THEME SWITCHER */
-themeSelect.addEventListener('change', ()=> {
-  document.body.setAttribute('data-theme', themeSelect.value);
+/* COUNTRY FLAGS DATA */
+const countryFlags = {
+  'US': '🇺🇸', 'IN': '🇮🇳', 'GB': '🇬🇧', 'CA': '🇨🇦', 'AU': '🇦🇺',
+  'DE': '🇩🇪', 'FR': '🇫🇷', 'BR': '🇧🇷', 'JP': '🇯🇵', 'KR': '🇰🇷',
+  'CN': '🇨🇳', 'RU': '🇷🇺', 'IT': '🇮🇹', 'ES': '🇪🇸', 'MX': '🇲🇽',
+  'NL': '🇳🇱', 'SE': '🇸🇪', 'NO': '🇳🇴', 'DK': '🇩🇰', 'FI': '🇫🇮',
+  'PL': '🇵🇱', 'TR': '🇹🇷', 'SA': '🇸🇦', 'AE': '🇦🇪', 'ZA': '🇿🇦',
+  'NG': '🇳🇬', 'EG': '🇪🇬', 'KE': '🇰🇪', 'IL': '🇮🇱', 'SG': '🇸🇬',
+  'MY': '🇲🇾', 'TH': '🇹🇭', 'ID': '🇮🇩', 'PH': '🇵🇭', 'VN': '🇻🇳',
+  'AR': '🇦🇷', 'CL': '🇨🇱', 'CO': '🇨🇴', 'PE': '🇵🇪', 'NZ': '🇳🇿'
+};
+
+/* ACHIEVEMENTS DATA */
+const achievements = [
+  { id: 'first_game', title: 'First Steps', desc: 'Complete your first game', icon: '🚀', target: 1, type: 'games' },
+  { id: 'speed_demon', title: 'Speed Demon', desc: 'Achieve 5 presses per second', icon: '⚡', target: 5, type: 'rate' },
+  { id: 'marathon', title: 'Marathon Runner', desc: 'Play for more than 1 minute', icon: '🏃', target: 60, type: 'time' },
+  { id: 'centurion', title: 'Centurion', desc: 'Score 100 points in a game', icon: '💯', target: 100, type: 'score' },
+  { id: 'pro_player', title: 'Pro Player', desc: 'Play 10 games', icon: '🎮', target: 10, type: 'games' },
+  { id: 'top_rank', title: 'Top Rank', desc: 'Reach top 3 in global ranking', icon: '🥇', target: 3, type: 'rank' },
+  { id: 'daily_champ', title: 'Daily Champion', desc: 'Complete a daily challenge', icon: '🏅', target: 1, type: 'challenge' },
+  { id: 'social_butterfly', title: 'Social Butterfly', desc: 'Share your score 3 times', icon: '📤', target: 3, type: 'shares' }
+];
+
+/* DAILY CHALLENGES */
+const dailyChallenges = [
+  { id: 'speed_run', title: 'Speed Run', desc: 'Score 50 points in 30 seconds', target: 50, time: 30 },
+  { id: 'endurance', title: 'Endurance', desc: 'Score 100 points in 60 seconds', target: 100, time: 60 },
+  { id: 'precision', title: 'Precision', desc: 'Achieve 4.0 presses per second', target: 4.0, time: 0, type: 'rate' }
+];
+
+/* SOUNDS */
+function playSound(type) {
+  if (!soundEnabled) return;
+  
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  
+  if (type === 'press') {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(300, audioContext.currentTime + 0.1);
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.1);
+  } else if (type === 'achievement') {
+    // Achievement sound - a little fanfare
+    const times = [0, 0.1, 0.2, 0.3, 0.4];
+    const frequencies = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C, E, G, C, E
+    
+    times.forEach((time, i) => {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(frequencies[i], audioContext.currentTime + time);
+      
+      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime + time);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + time + 0.3);
+      
+      oscillator.start(audioContext.currentTime + time);
+      oscillator.stop(audioContext.currentTime + time + 0.3);
+    });
+  }
+}
+
+/* NOTIFICATION SYSTEM */
+function showNotification(title, description) {
+  notificationTitle.textContent = title;
+  notificationDesc.textContent = description;
+  notification.classList.add('show');
+  
+  setTimeout(() => {
+    notification.classList.remove('show');
+  }, 3000);
+}
+
+/* THEME SYSTEM */
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const theme = btn.getAttribute('data-theme');
+    document.body.setAttribute('data-theme', theme);
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Add particles for specific themes
+    createParticles();
+  });
 });
+
+/* PARTICLE EFFECT */
+function createParticles() {
+  particlesEl.innerHTML = '';
+  const theme = document.body.getAttribute('data-theme');
+  if (theme === 'rgb' || theme === 'neon' || theme === 'matrix') {
+    const count = theme === 'matrix' ? 100 : 50;
+    for (let i = 0; i < count; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.width = Math.random() * 4 + 1 + 'px';
+      particle.style.height = particle.style.width;
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animation = `float ${Math.random() * 20 + 10}s linear infinite`;
+      
+      if (theme === 'matrix') {
+        particle.style.background = '#00ff41';
+        particle.style.boxShadow = '0 0 8px #00ff41';
+      } else if (theme === 'neon') {
+        particle.style.background = '#00f7ff';
+        particle.style.boxShadow = '0 0 8px #00f7ff';
+      } else {
+        const colors = ['#ff4e50', '#f9d423', '#1fa2ff'];
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+      }
+      
+      particlesEl.appendChild(particle);
+    }
+    
+    // Add CSS animation for particles
+    if (!document.getElementById('particle-styles')) {
+      const style = document.createElement('style');
+      style.id = 'particle-styles';
+      style.textContent = `
+        @keyframes float {
+          0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { transform: translateY(-1000%) rotate(360deg); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+}
 
 /* HELPERS */
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -156,21 +496,198 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;',
 function loadSubmissions(){ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
 function saveSubmissions(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
 
-/* CONFETTI EFFECT - From 1st version */
+function getRandomCountryCode() {
+  const codes = Object.keys(countryFlags);
+  return codes[Math.floor(Math.random() * codes.length)];
+}
+
+/* ACHIEVEMENTS SYSTEM */
+function loadAchievements() {
+  return JSON.parse(localStorage.getItem(ACHIEVEMENTS_KEY) || '{}');
+}
+
+function saveAchievements(achievementsObj) {
+  localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievementsObj));
+}
+
+function checkAchievements(type, value) {
+  const userAchievements = loadAchievements();
+  let unlocked = [];
+  
+  achievements.forEach(achievement => {
+    if (achievement.type === type) {
+      if (!userAchievements[achievement.id]) {
+        userAchievements[achievement.id] = 0;
+      }
+      
+      const newValue = Math.min(achievement.target, userAchievements[achievement.id] + value);
+      userAchievements[achievement.id] = newValue;
+      
+      if (newValue >= achievement.target && userAchievements[achievement.id] !== achievement.target) {
+        // Achievement unlocked!
+        userAchievements[achievement.id] = achievement.target;
+        unlocked.push(achievement);
+        
+        // Show notification
+        showNotification('Achievement Unlocked!', achievement.title);
+        
+        // Play sound
+        playSound('achievement');
+      }
+    }
+  });
+  
+  saveAchievements(userAchievements);
+  updateAchievementsDisplay();
+  return unlocked;
+}
+
+function updateAchievementsDisplay() {
+  const userAchievements = loadAchievements();
+  achievementsGrid.innerHTML = '';
+  
+  achievements.forEach(achievement => {
+    const progress = userAchievements[achievement.id] || 0;
+    const percent = (progress / achievement.target) * 100;
+    
+    const achievementEl = document.createElement('div');
+    achievementEl.className = 'achievement-item';
+    achievementEl.innerHTML = `
+      <div class="achievement-icon">${achievement.icon}</div>
+      <div class="achievement-info">
+        <div class="achievement-title">${achievement.title}</div>
+        <div class="achievement-desc">${achievement.desc}</div>
+        <div class="achievement-progress">
+          <div class="achievement-progress-bar" style="width: ${percent}%"></div>
+        </div>
+      </div>
+    `;
+    
+    if (progress >= achievement.target) {
+      achievementEl.style.background = 'rgba(255,215,0,0.1)';
+      achievementEl.style.border = '1px solid gold';
+    }
+    
+    achievementsGrid.appendChild(achievementEl);
+  });
+}
+
+/* DAILY CHALLENGE SYSTEM */
+function getDailyChallenge() {
+  const today = new Date().toDateString();
+  const saved = localStorage.getItem(DAILY_CHALLENGE_KEY);
+  
+  if (saved) {
+    const data = JSON.parse(saved);
+    if (data.date === today) {
+      return data.challenge;
+    }
+  }
+  
+  // New challenge for today
+  const challenge = dailyChallenges[Math.floor(Math.random() * dailyChallenges.length)];
+  localStorage.setItem(DAILY_CHALLENGE_KEY, JSON.stringify({
+    date: today,
+    challenge: challenge,
+    progress: 0
+  }));
+  
+  return challenge;
+}
+
+function updateDailyChallengeProgress(presses, time, rate) {
+  const today = new Date().toDateString();
+  const saved = JSON.parse(localStorage.getItem(DAILY_CHALLENGE_KEY) || '{}');
+  
+  if (saved.date !== today) return;
+  
+  const challenge = saved.challenge;
+  let progress = saved.progress || 0;
+  
+  if (challenge.type === 'rate') {
+    progress = Math.max(progress, rate);
+  } else {
+    progress = Math.max(progress, presses);
+  }
+  
+  localStorage.setItem(DAILY_CHALLENGE_KEY, JSON.stringify({
+    date: today,
+    challenge: challenge,
+    progress: progress
+  }));
+  
+  // Update UI
+  challengeDesc.textContent = challenge.desc;
+  challengeProgressText.textContent = `${Math.round(progress)}/${challenge.target}`;
+  challengeProgressBar.style.width = `${Math.min(100, (progress / challenge.target) * 100)}%`;
+  challengeTime.textContent = challenge.time > 0 ? `${challenge.time}s` : 'Any time';
+  
+  // Check if challenge completed
+  if (progress >= challenge.target && !saved.completed) {
+    saved.completed = true;
+    localStorage.setItem(DAILY_CHALLENGE_KEY, JSON.stringify(saved));
+    
+    // Award achievement
+    checkAchievements('challenge', 1);
+    showNotification('Daily Challenge Complete!', `You completed: ${challenge.title}`);
+  }
+}
+
+/* SOCIAL SHARING */
+function shareScore(platform) {
+  const player = mainName.value.trim() || 'Anonymous';
+  const score = count;
+  const rank = statRank.textContent;
+  
+  const text = `I scored ${score} points in Space Power! ${rank ? `My global rank: ${rank}` : ''} 🚀\n\nCan you beat me? #SpacePower #ClickChallenge`;
+  const url = window.location.href;
+  
+  let shareUrl = '';
+  
+  switch(platform) {
+    case 'twitter':
+      shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+      break;
+    case 'whatsapp':
+      shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+      break;
+    case 'facebook':
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
+      break;
+  }
+  
+  if (shareUrl) {
+    window.open(shareUrl, '_blank', 'width=600,height=400');
+    checkAchievements('shares', 1);
+  }
+}
+
+function copyScoreLink() {
+  const text = `I scored ${count} points in Space Power! 🚀\n\nCan you beat me? ${window.location.href} #SpacePower`;
+  
+  navigator.clipboard.writeText(text).then(() => {
+    showNotification('Copied!', 'Score link copied to clipboard');
+    checkAchievements('shares', 1);
+  });
+}
+
+/* CONFETTI EFFECT */
 function createConfetti() {
   confettiContainer.innerHTML = '';
-  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-  for(let i=0; i<150; i++) {
+  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff9900', '#ff00cc'];
+  for(let i=0; i<200; i++) {
     const piece = document.createElement('div');
     piece.className = 'confetti-piece';
     piece.style.background = colors[Math.floor(Math.random() * colors.length)];
     piece.style.left = Math.random() * 100 + 'vw';
     piece.style.top = '-10px';
-    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+    piece.style.width = Math.random() * 12 + 6 + 'px';
+    piece.style.height = piece.style.width;
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
     
     const animation = piece.animate([
-      { top: '-10px', opacity: 1, transform: `rotate(0deg)` },
-      { top: Math.random() * 100 + 50 + 'vh', opacity: 0, transform: `rotate(${Math.random() * 720}deg)` }
+      { top: '-10px', opacity: 1, transform: `rotate(0deg) scale(1)` },
+      { top: Math.random() * 100 + 50 + 'vh', opacity: 0, transform: `rotate(${Math.random() * 720}deg) scale(0.5)` }
     ], {
       duration: 2000 + Math.random() * 3000,
       easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
@@ -181,7 +698,421 @@ function createConfetti() {
   }
 }
 
-/* API QUEUE SYSTEM - From 2nd version */
+// ... (Rest of the code remains the same as previous version, but integrated with new features)
+
+/* SOUND TOGGLE */
+soundToggle.addEventListener('click', () => {
+  soundEnabled = !soundEnabled;
+  soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+  soundToggle.title = soundEnabled ? 'Sound On' : 'Sound Off';
+});
+
+/* ACHIEVEMENTS BUTTON */
+achievementsBtn.addEventListener('click', () => {
+  achievementsSection.style.display = achievementsSection.style.display === 'none' ? 'block' : 'none';
+});
+
+/* SHARE BUTTON */
+shareBtn.addEventListener('click', () => {
+  if (count > 0) {
+    // Show share options in a modal or directly share
+    const player = mainName.value.trim() || 'Anonymous';
+    const text = `I scored ${count} points in Space Power! 🚀\n\nCan you beat me? ${window.location.href} #SpacePower`;
+    
+    if (navigator.share) {
+      navigator.share({
+        title: 'Space Power Score',
+        text: text,
+        url: window.location.href,
+      })
+      .then(() => checkAchievements('shares', 1))
+      .catch(console.error);
+    } else {
+      // Fallback to copy to clipboard
+      copyScoreLink();
+    }
+  } else {
+    showNotification('No Score to Share', 'Play a game first to share your score!');
+  }
+});
+
+/* INITIALIZATION */
+function init() {
+  setInterval(processQueue, 10000);
+  updateLeaderboardPreview();
+  createParticles();
+  updateAchievementsDisplay();
+  
+  // Load daily challenge
+  dailyChallenge = getDailyChallenge();
+  updateDailyChallengeProgress(0, 0, 0);
+  
+  // Preload last name
+  const last = localStorage.getItem(LAST_NAME_KEY);
+  if(last) mainName.value = last;
+}
+
+// Initialize the app
+init();
+
+// ... (The rest of your existing JavaScript code for game functionality goes here)
+// Note: I've kept the core game logic the same but integrated the new features
+
+/* MODAL LOGIC */
+startBtn.addEventListener('click', () => {
+  const nm = mainName.value.trim();
+  if(!nm){
+    modal.style.display = 'flex';
+    modalInput.value = '';
+    modalInput.focus();
+    return;
+  }
+  beginSession(nm);
+});
+
+modalInput.addEventListener('input', () => { modalError.style.display = 'none'; });
+
+modalStart.addEventListener('click', () => {
+  const v = modalInput.value.trim();
+  if(!v){ 
+    modalError.style.display = 'block'; 
+    return; 
+  }
+  mainName.value = v;
+  modal.style.display = 'none';
+  beginSession(v);
+});
+
+modalX.addEventListener('click', () => { 
+  modal.style.display = 'none';
+  beginSession('Anonymous');
+});
+
+prefillBtn.addEventListener('click', () => {
+  const last = localStorage.getItem(LAST_NAME_KEY);
+  if(last) mainName.value = last;
+});
+
+refreshLeaderboard.addEventListener('click', updateLeaderboardPreview);
+
+/* SESSION MANAGEMENT */
+function beginSession(name){
+  if(playing) return;
+  playing = true;
+  count = 0;
+  stamps = [];
+  startTime = Date.now();
+  lastSpace = false;
+  countBox.textContent = '0';
+  countBox.style.width = '120px';
+  endBtn.disabled = false;
+  startBtn.disabled = true;
+  
+  // Update stats
+  statPresses.textContent = '0';
+  statRate.textContent = '0.0';
+  statTime.textContent = '0s';
+  
+  // Start timer
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(updateStats, 100);
+  
+  if(name && name !== 'Anonymous'){
+    localStorage.setItem(LAST_NAME_KEY, name);
+  }
+  
+  // Add achievement badge for first game
+  if(!localStorage.getItem('sp_first_game')) {
+    localStorage.setItem('sp_first_game', 'true');
+    setTimeout(() => {
+      const badge = document.createElement('div');
+      badge.className = 'achievement-badge';
+      badge.textContent = 'First Game!';
+      document.querySelector('.card').appendChild(badge);
+      setTimeout(() => badge.remove(), 3000);
+    }, 1000);
+  }
+}
+
+function updateStats() {
+  if (!playing) return;
+  
+  const duration_ms = Date.now() - startTime;
+  const seconds = duration_ms / 1000;
+  const rate = seconds > 0 ? (count / seconds).toFixed(1) : '0.0';
+  
+  statPresses.textContent = count;
+  statRate.textContent = rate;
+  statTime.textContent = Math.floor(seconds) + 's';
+  
+  // Update daily challenge progress
+  updateDailyChallengeProgress(count, seconds, parseFloat(rate));
+}
+
+/* INCREMENT LOGIC */
+function increment(){
+  if(!playing) return;
+  const now = Date.now();
+  if(now - lastClickTs < 30) return;
+  lastClickTs = now;
+  
+  count++; 
+  countBox.textContent = String(count);
+  countBox.style.width = Math.max(120, 100 + String(count).length * 18) + 'px';
+  stamps.push(Date.now() - startTime);
+  
+  // Play sound
+  playSound('press');
+  
+  // RANDOM COLOR EFFECT
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  spaceBtn.style.background = `linear-gradient(145deg, rgb(${r}, ${g}, ${b}), rgb(${r-30}, ${g-30}, ${b-30}))`;
+  
+  // AUTO-SAVE
+  if(Date.now() - lastSaveTs > 5000){
+    lastSaveTs = Date.now();
+    localStorage.setItem('sp_current', JSON.stringify({
+      name: mainName.value || 'Anonymous', 
+      count, 
+      stamps, 
+      startTime
+    }));
+  }
+}
+
+/* INPUT CONTROLS */
+spaceBtn.addEventListener('click', e => {
+  e.preventDefault();
+  increment();
+});
+
+document.addEventListener('keydown', e => {
+  if((e.code === 'Space' || e.key === ' ') && !lastSpace){
+    e.preventDefault();
+    lastSpace = true;
+    increment();
+  }
+});
+
+document.addEventListener('keyup', e => {
+  if(e.code === 'Space' || e.key === ' '){
+    lastSpace = false;
+  }
+});
+
+/* RESET BUTTON */
+resetBtn.addEventListener('click', () => {
+  if(playing) {
+    if(confirm('Are you sure you want to reset? Your current progress will be lost.')) {
+      playing = false;
+      count = 0;
+      stamps = [];
+      countBox.textContent = '0';
+      countBox.style.width = '120px';
+      endBtn.disabled = true;
+      startBtn.disabled = false;
+      spaceBtn.style.background = 'linear-gradient(145deg, var(--accent), #0ea5e9)';
+      
+      if(timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      
+      statPresses.textContent = '0';
+      statRate.textContent = '0.0';
+      statTime.textContent = '0s';
+    }
+  } else {
+    count = 0;
+    countBox.textContent = '0';
+    countBox.style.width = '120px';
+    spaceBtn.style.background = 'linear-gradient(145deg, var(--accent), #0ea5e9)';
+    
+    statPresses.textContent = '0';
+    statRate.textContent = '0.0';
+    statTime.textContent = '0s';
+  }
+});
+
+/* END SESSION */
+let chartInstance = null;
+
+endBtn.addEventListener('click', () => {
+  if(!playing) return;
+  playing = false;
+  endBtn.disabled = true;
+  startBtn.disabled = false;
+  
+  if(timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  
+  const duration_ms = Date.now() - startTime;
+  const seconds = Math.floor(duration_ms / 1000);
+  const timeText = Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
+  const rate = (count / (duration_ms / 1000)).toFixed(1);
+  const player = (mainName.value.trim() || 'Anonymous');
+  const country = getRandomCountryCode();
+  
+  // CHECK ACHIEVEMENTS
+  checkAchievements('games', 1);
+  checkAchievements('score', count);
+  checkAchievements('time', seconds);
+  checkAchievements('rate', parseFloat(rate));
+  
+  // SAVE TO LOCAL STORAGE
+  if(player !== 'Anonymous'){
+    const arr = loadSubmissions();
+    arr.push({
+      name: player, 
+      presses: count, 
+      duration_ms, 
+      ts: Date.now(),
+      country: country
+    });
+    saveSubmissions(arr);
+    localStorage.setItem(LAST_NAME_KEY, player);
+  }
+  
+  // CALCULATE RANK
+  let rankText = 'No rank (anonymous player)';
+  let rankNum = null;
+  if(player !== 'Anonymous'){
+    const named = getNamedSorted();
+    const higher = named.filter(x => x.presses > count).length;
+    const rank = higher + 1;
+    rankNum = rank;
+    rankText = `#${rank} of ${named.length || 1}`;
+    
+    // Update stat rank
+    statRank.textContent = `#${rank}`;
+    
+    // Check rank achievement
+    if (rankNum <= 3) {
+      checkAchievements('rank', 4 - rankNum); // 3 for bronze, 2 for silver, 1 for gold
+    }
+    
+    // MOTIVATIONAL MESSAGES + CONFETTI
+    if(rankNum <= 10){
+      let msg = '';
+      if(rankNum === 1){
+        msg = "🏆 CONGRATULATIONS! You're #1 in the world! Legendary!";
+        createConfetti();
+      } else if(rankNum === 2){
+        msg = "🔥 Amazing! You're #2 globally! So close to the top!";
+        createConfetti();
+      } else if(rankNum === 3){
+        msg = "⭐ Fantastic! You're #3 worldwide! Top tier performance!";
+        createConfetti();
+      } else {
+        msg = `🎯 Excellent! You're #${rankNum} globally! Top 10 achiever!`;
+      }
+      setTimeout(() => alert(msg), 300);
+    }
+  }
+  
+  // UPDATE RESULT MODAL
+  resName.textContent = player + ' ' + (player !== 'Anonymous' ? countryFlags[country] : '');
+  resPresses.textContent = String(count);
+  resTime.textContent = timeText;
+  resRate.textContent = rate + '/sec';
+  resRank.textContent = rankText;
+  
+  // UPDATE LEADERBOARD
+  const top = getNamedSorted().slice(0, 10);
+  leaderboardEl.innerHTML = '';
+  if(!top.length){
+    leaderboardEl.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">No named submissions yet</div>';
+  } else {
+    top.forEach((p,i) => {
+      const d = document.createElement('div');
+      d.className = 'top-item';
+      d.innerHTML = `
+        <div class="rank">#${i+1}</div>
+        <div class="name">
+          <span class="flag">${p.country ? countryFlags[p.country] : '🏴'}</span>
+          ${escapeHtml(p.name)}
+        </div>
+        <div class="score">${p.presses}</div>
+      `;
+      leaderboardEl.appendChild(d);
+    });
+  }
+  
+  // CHART
+  try {
+    resultChart.style.display = 'block';
+    const ctx = resultChart.getContext('2d');
+    if(chartInstance){
+      chartInstance.destroy();
+      chartInstance = null;
+    }
+    chartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: stamps.map((_,i) => i+1),
+        datasets: [{
+          label: 'Time between presses (ms)',
+          data: stamps.map((stamp, i) => i === 0 ? stamp : stamp - stamps[i-1]),
+          borderColor: document.body.getAttribute('data-theme') === 'matrix' ? '#00ff41' : '#06b6d4',
+          backgroundColor: document.body.getAttribute('data-theme') === 'matrix' ? 'rgba(0, 255, 65, 0.12)' : 'rgba(6, 182, 212, 0.12)',
+          tension: 0.25,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { 
+            beginAtZero: true,
+            grid: { color: 'rgba(255,255,255,0.1)' },
+            ticks: { color: 'var(--muted)' }
+          },
+          x: {
+            grid: { color: 'rgba(255,255,255,0.1)' },
+            ticks: { color: 'var(--muted)' }
+          }
+        },
+        plugins: {
+          legend: { labels: { color: 'var(--muted)' } }
+        }
+      }
+    });
+  } catch(e) {
+    console.warn('Chart error:', e);
+  }
+  
+  resultModal.style.display = 'flex';
+  
+  // API SYNC
+  const payload = {
+    name: player,
+    presses: count,
+    duration_ms,
+    stamps,
+    ts: Date.now(),
+    country: country
+  };
+  enqueuePayload(payload);
+  
+  updateLeaderboardPreview();
+});
+
+/* CLOSE RESULT MODAL */
+resultClose.addEventListener('click', () => {
+  resultModal.style.display = 'none';
+  count = 0;
+  countBox.textContent = '0';
+  stamps = [];
+  endBtn.disabled = true;
+  startBtn.disabled = false;
+  spaceBtn.style.background = 'linear-gradient(145deg, var(--accent), #0ea5e9)';
+});
+
+/* API QUEUE SYSTEM */
 function enqueuePayload(payload){
   if(!API_ENDPOINT) return;
   const q = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
@@ -230,263 +1161,26 @@ function getNamedSorted(){
 }
 
 function updateLeaderboardPreview(){
-  const top = getNamedSorted().slice(0,5);
+  const top = getNamedSorted().slice(0,10);
   leaderboardPreview.innerHTML = '';
   if(!top.length){
-    leaderboardPreview.innerHTML = '<div style="color:var(--muted)">No named submissions yet</div>';
+    leaderboardPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">No named submissions yet. Be the first!</div>';
     return;
   }
   top.forEach((p,i) => {
     const div = document.createElement('div');
     div.className = 'top-item';
-    div.innerHTML = `<div>#${i+1} ${escapeHtml(p.name)}</div><div>${p.presses}</div>`;
+    div.innerHTML = `
+      <div class="rank">#${i+1}</div>
+      <div class="name">
+        <span class="flag">${p.country ? countryFlags[p.country] : '🏴'}</span>
+        ${escapeHtml(p.name)}
+      </div>
+      <div class="score">${p.presses}</div>
+    `;
     leaderboardPreview.appendChild(div);
   });
 }
-
-/* MODAL LOGIC - Combined from both versions */
-startBtn.addEventListener('click', () => {
-  const nm = mainName.value.trim();
-  if(!nm){
-    modal.style.display = 'flex';
-    modalInput.value = '';
-    modalInput.focus();
-    return;
-  }
-  beginSession(nm);
-});
-
-modalInput.addEventListener('input', () => { modalError.style.display = 'none'; });
-
-modalStart.addEventListener('click', () => {
-  const v = modalInput.value.trim();
-  if(!v){ 
-    modalError.style.display = 'block'; 
-    return; 
-  }
-  mainName.value = v;
-  modal.style.display = 'none';
-  beginSession(v);
-});
-
-modalX.addEventListener('click', () => { 
-  modal.style.display = 'none';
-  beginSession('Anonymous');
-});
-
-prefillBtn.addEventListener('click', () => {
-  const last = localStorage.getItem(LAST_NAME_KEY);
-  if(last) mainName.value = last;
-});
-
-/* SESSION MANAGEMENT */
-function beginSession(name){
-  if(playing) return;
-  playing = true;
-  count = 0;
-  stamps = [];
-  startTime = Date.now();
-  lastSpace = false;
-  countBox.textContent = '0';
-  countBox.style.width = '80px';
-  endBtn.disabled = false;
-  
-  if(name && name !== 'Anonymous'){
-    localStorage.setItem(LAST_NAME_KEY, name);
-  }
-}
-
-/* INCREMENT LOGIC - With color effects from 1st version */
-function increment(){
-  if(!playing) return;
-  const now = Date.now();
-  if(now - lastClickTs < 30) return;
-  lastClickTs = now;
-  
-  count++; 
-  countBox.textContent = String(count);
-  countBox.style.width = Math.max(80, 60 + String(count).length * 18) + 'px';
-  stamps.push(Date.now() - startTime);
-  
-  // RANDOM COLOR EFFECT - From 1st version
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
-  spaceBtn.style.background = `rgb(${r}, ${g}, ${b})`;
-  
-  // AUTO-SAVE - From 1st version
-  if(Date.now() - lastSaveTs > 5000){
-    lastSaveTs = Date.now();
-    localStorage.setItem('sp_current', JSON.stringify({
-      name: mainName.value || 'Anonymous', 
-      count, 
-      stamps, 
-      startTime
-    }));
-  }
-}
-
-/* INPUT CONTROLS */
-spaceBtn.addEventListener('click', e => {
-  e.preventDefault();
-  increment();
-});
-
-document.addEventListener('keydown', e => {
-  if((e.code === 'Space' || e.key === ' ') && !lastSpace){
-    e.preventDefault();
-    lastSpace = true;
-    increment();
-  }
-});
-
-document.addEventListener('keyup', e => {
-  if(e.code === 'Space' || e.key === ' '){
-    lastSpace = false;
-  }
-});
-
-/* END SESSION - With combined features */
-let chartInstance = null;
-
-endBtn.addEventListener('click', () => {
-  if(!playing) return;
-  playing = false;
-  endBtn.disabled = true;
-  
-  const duration_ms = Date.now() - startTime;
-  const seconds = Math.floor(duration_ms / 1000);
-  const timeText = Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
-  const player = (mainName.value.trim() || 'Anonymous');
-  
-  // SAVE TO LOCAL STORAGE
-  if(player !== 'Anonymous'){
-    const arr = loadSubmissions();
-    arr.push({
-      name: player, 
-      presses: count, 
-      duration_ms, 
-      ts: Date.now()
-    });
-    saveSubmissions(arr);
-    localStorage.setItem(LAST_NAME_KEY, player);
-  }
-  
-  // CALCULATE RANK
-  let rankText = 'No rank (you skipped name)';
-  let rankNum = null;
-  if(player !== 'Anonymous'){
-    const named = getNamedSorted();
-    const higher = named.filter(x => x.presses > count).length;
-    const rank = higher + 1;
-    rankNum = rank;
-    rankText = `${rank} / ${named.length || 0}`;
-    
-    // MOTIVATIONAL MESSAGES + CONFETTI - Combined features
-    if(rankNum <= 10){
-      let msg = '';
-      if(rankNum === 1){
-        msg = "🔥 Amazing! You're #1! Keep it up!";
-        createConfetti(); // CONFETTI for #1
-      } else if(rankNum === 2){
-        msg = "💪 Great job! You're #2! Almost at the top!";
-        createConfetti(); // CONFETTI for #2
-      } else if(rankNum === 3){
-        msg = "✨ Awesome! You're #3! Keep pushing!";
-        createConfetti(); // CONFETTI for #3
-      } else {
-        msg = `🎉 Well done! You made Top10! You're #${rankNum}. Keep improving!`;
-      }
-      setTimeout(() => alert(msg), 120);
-    }
-  }
-  
-  // UPDATE RESULT MODAL
-  resName.textContent = player;
-  resPresses.textContent = String(count);
-  resTime.textContent = timeText;
-  resRank.textContent = rankText;
-  
-  // UPDATE LEADERBOARD
-  const top = getNamedSorted().slice(0, 10);
-  leaderboardEl.innerHTML = '';
-  if(!top.length){
-    leaderboardEl.innerHTML = '<div style="color:var(--muted)">No named submissions yet</div>';
-  } else {
-    top.forEach((p,i) => {
-      const d = document.createElement('div');
-      d.className = 'top-item';
-      d.innerHTML = `<div>#${i+1} ${escapeHtml(p.name)}</div><div>${p.presses}</div>`;
-      leaderboardEl.appendChild(d);
-    });
-  }
-  
-  // CHART - From 1st version
-  try {
-    resultChart.style.display = 'block';
-    const ctx = resultChart.getContext('2d');
-    if(chartInstance){
-      chartInstance.destroy();
-      chartInstance = null;
-    }
-    chartInstance = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: stamps.map((_,i) => i+1),
-        datasets: [{
-          label: 'ms since start',
-          data: stamps,
-          borderColor: '#06b6d4',
-          backgroundColor: 'rgba(6, 182, 212, 0.12)',
-          tension: 0.25,
-          fill: true
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
-  } catch(e) {
-    console.warn('Chart error:', e);
-  }
-  
-  resultModal.style.display = 'flex';
-  
-  // API SYNC - From 2nd version
-  const payload = {
-    name: player,
-    presses: count,
-    duration_ms,
-    stamps,
-    ts: Date.now()
-  };
-  enqueuePayload(payload);
-  
-  updateLeaderboardPreview();
-});
-
-/* CLOSE RESULT MODAL */
-resultClose.addEventListener('click', () => {
-  resultModal.style.display = 'none';
-  count = 0;
-  countBox.textContent = '0';
-  stamps = [];
-  endBtn.disabled = true;
-  spaceBtn.style.background = 'var(--accent)'; // Reset button color
-});
-
-/* INITIALIZATION */
-setInterval(processQueue, 10000); // API queue processing
-updateLeaderboardPreview();
-
-// Preload last name - From 1st version
-(function() {
-  const last = localStorage.getItem(LAST_NAME_KEY);
-  if(last) mainName.value = last;
-})();
 </script>
 </body>
 </html>
