@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
-      <meta name="google-site-verification" content="S05vmq2uaQ-rWMcqLfzYx4azyy5nvQzmy5zeSBD8VlY" />
+<head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Space Power — Press Tracker</title>
-<meta name="description" content="Space Power — press space, track score, compare with others. Simple, fast and reliable.">
+<meta name="description" content="Space Power — press space or click to track your score and compete globally.">
 <style>
   :root{--bg:#071023;--card:#0b1220;--muted:#94a3b8;--accent:#06b6d4}
   [data-theme="light"]{--bg:#f4f7fb;--card:#ffffff;--muted:#5b6470;--accent:#067fbf;color:#0b1220}
@@ -14,7 +13,7 @@
   [data-theme="matrix"]{--bg:#000;--card:#001100;--muted:#00ff41;--accent:#00ff41;color:#00ff41}
   
   body{margin:0;background:var(--bg);color:var(--color, #e6eef6);font-family:'Segoe UI', system-ui, Arial, sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:18px;transition:all 0.3s ease}
-  .card{width:100%;max-width:900px;background:var(--card);padding:24px;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.05);position:relative;overflow:hidden}
+  .card{width:100%;max-width:800px;background:var(--card);padding:24px;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.05);position:relative;overflow:hidden}
   .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--accent);border-radius:16px 16px 0 0}
   
   h1{margin:0 0 15px;font-size:28px;font-weight:800;text-align:center;background:linear-gradient(90deg, var(--accent), #a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(6,182,212,0.3)}
@@ -46,16 +45,18 @@
   .close-x{position:absolute;top:12px;right:15px;background:transparent;border:0;color:var(--muted);font-weight:700;font-size:22px;cursor:pointer;padding:5px;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
   .close-x:hover{background:rgba(255,255,255,0.1);color:#fff}
   .error{color:#ff6b6b;font-size:14px;margin-top:8px;display:none}
-  .leaderboard{margin-top:15px;max-height:280px;overflow:auto;border-radius:10px;background:rgba(255,255,255,0.02);padding:10px}
+  .error.success{color:#10b981}
+  .leaderboard{margin-top:15px;max-height:280px;overflow:auto;border-radius:10px;background:rgba(255,255,255,0.02);padding:10px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--accent) rgba(255,255,255,0.1)}
+  .leaderboard::-webkit-scrollbar{width:6px}
+  .leaderboard::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
   .top-item{display:flex;justify-content:space-between;padding:10px 12px;border-radius:8px;margin-bottom:8px;background:linear-gradient(90deg,rgba(255,255,255,0.03),transparent);transition:all 0.2s;align-items:center}
   .top-item:hover{background:linear-gradient(90deg,rgba(255,255,255,0.08),transparent);transform:translateX(5px)}
   .top-item .rank{font-weight:700;color:var(--accent);min-width:30px}
-  .top-item .name{flex:1;display:flex;align-items:center;gap:8px}
+  .top-item .name{flex:1;display:flex;align-items:center;gap:8px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .top-item .score{font-weight:700;color:var(--accent)}
   .flag{width:20px;height:15px;border-radius:2px;box-shadow:0 0 3px rgba(0,0,0,0.3)}
   #resultModal .modal{max-width:700px}
   .confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100}
-  .confetti-piece{position:absolute;width:12px;height:12px;background:#ff0;opacity:0;border-radius:50%}
   
   .stats-bar{display:flex;justify-content:space-around;margin:20px 0;padding:15px;background:rgba(255,255,255,0.03);border-radius:12px;flex-wrap:wrap;gap:10px}
   .stat-item{text-align:center}
@@ -75,52 +76,56 @@
   @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
   
   .particles{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
-  .particle{position:absolute;background:var(--accent);border-radius:50%;opacity:0.3}
   
-  /* NEW STYLES FOR ADDED FEATURES */
-  .features-bar{display:flex;justify-content:center;gap:15px;margin:15px 0;flex-wrap:wrap}
-  .feature-btn{background:rgba(255,255,255,0.08);color:inherit;border:none;padding:10px 15px;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;font-size:14px}
-  .feature-btn:hover{background:rgba(255,255,255,0.12);transform:translateY(-2px)}
+  .countdown-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:1000;font-size:120px;font-weight:800;color:#fff;backdrop-filter:blur(10px)}
+  .countdown-number{animation:zoomInOut 1s ease-in-out}
+  @keyframes zoomInOut{0%{transform:scale(0);opacity:0}50%{transform:scale(1.2);opacity:1}100%{transform:scale(0);opacity:0}}
   
-  .achievements-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:10px;margin-top:15px;max-height:200px;overflow-y:auto}
-  .achievement-item{padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;display:flex;align-items:center;gap:10px}
-  .achievement-icon{width:30px;height:30px;background:gold;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
-  .achievement-info{flex:1}
-  .achievement-title{font-weight:600;font-size:13px}
-  .achievement-desc{font-size:11px;color:var(--muted)}
-  .achievement-progress{height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:5px;overflow:hidden}
-  .achievement-progress-bar{height:100%;background:var(--accent);transition:width 0.3s}
+  .result-actions{display:flex;gap:10px;margin:15px 0;justify-content:center}
+  .restart-btn{background:linear-gradient(145deg, #3b82f6, #1d4ed8);color:#fff;padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
+  .restart-btn:hover{transform:translateY(-2px)}
   
-  .daily-challenge{background:linear-gradient(145deg, #f59e0b, #d97706);padding:15px;border-radius:12px;margin:15px 0;text-align:center}
-  .challenge-title{font-weight:700;margin-bottom:5px}
-  .challenge-desc{font-size:14px;margin-bottom:10px}
-  .challenge-progress{display:flex;justify-content:space-between;align-items:center}
-  .challenge-bar{flex:1;height:8px;background:rgba(0,0,0,0.2);border-radius:4px;margin:0 10px;overflow:hidden}
-  .challenge-progress-inner{height:100%;background:#fff;transition:width 0.3s}
+  .player-flag{width:28px;height:20px;border-radius:3px;box-shadow:0 2px 4px rgba(0,0,0,0.3);display:inline-block;vertical-align:middle;margin-left:5px}
   
-  .social-share{display:flex;justify-content:center;gap:10px;margin-top:15px}
-  .share-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:18px}
-  .share-btn.twitter{background:#1da1f2}
-  .share-btn.whatsapp{background:#25d366}
-  .share-btn.facebook{background:#1877f2}
-  .share-btn.link{background:var(--accent)}
+  .custom-confirm{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(5px)}
+  .confirm-box{background:var(--card);padding:20px;border-radius:12px;max-width:400px;width:90%;text-align:center;border:1px solid rgba(255,255,255,0.1)}
+  .confirm-buttons{display:flex;gap:10px;margin-top:20px;justify-content:center}
+  .confirm-btn{padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-weight:600;min-width:80px}
+  .confirm-yes{background:linear-gradient(145deg, #ef4444, #dc2626);color:#fff}
+  .confirm-no{background:rgba(255,255,255,0.1);color:inherit}
   
-  .sound-toggle{position:absolute;top:15px;left:15px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:all 0.2s}
-  .sound-toggle:hover{background:rgba(255,255,255,0.2)}
+  .country-selector{display:flex;align-items:center;gap:10px;margin:15px 0}
+  .country-flag{width:30px;height:20px;border-radius:3px}
+  .country-dropdown{padding:8px;border-radius:6px;background:rgba(255,255,255,0.05);color:inherit;border:1px solid rgba(255,255,255,0.1);flex:1}
   
-  .notification{position:fixed;top:20px;right:20px;background:var(--card);padding:15px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.3);z-index:1000;display:flex;align-items:center;gap:10px;transform:translateX(150%);transition:transform 0.3s}
-  .notification.show{transform:translateX(0)}
-  .notification-icon{width:30px;height:30px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .sound-toggle{position:absolute;top:20px;right:70px;background:rgba(255,255,255,0.1);border:none;color:var(--muted);border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px}
+  
+  .notification{position:fixed;top:10px;left:50%;transform:translateX(-50%);padding:10px 20px;background:#ff6b6b;color:#fff;border-radius:8px;font-size:14px;z-index:1001;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:opacity 0.5s}
+  .notification.success{background:#10b981}
+  
+  .result-stats{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:15px 0}
+  .stat-card{background:rgba(255,255,255,0.03);padding:15px;border-radius:8px;text-align:center;border:1px solid rgba(255,255,255,0.05)}
+  .stat-card-value{font-size:24px;font-weight:700;color:var(--accent);margin-bottom:5px}
+  .stat-card-label{font-size:12px;color:var(--muted);text-transform:uppercase}
+  
+  #resName{font-size:18px;font-weight:600}
+  
+  .particles::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle, transparent 1px, var(--accent) 1px);background-size:20px 20px;animation:float 15s linear infinite;pointer-events:none;opacity:0.3}
+  .confetti::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(45deg, #ff0000 25%, transparent 25%, transparent 50%, #00ff00 50%, #00ff00 75%, transparent 75%, #0000ff);background-size:30px 30px;animation:confettiFall 2s ease-out forwards;pointer-events:none;opacity:0}
+  
+  @keyframes float{0%{transform:translateY(0px) translateX(0px)}100%{transform:translateY(-1000px) translateX(500px)}}
+  @keyframes confettiFall{0%{transform:translateY(-100px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(360deg);opacity:0}}
   
   @media(max-width:640px){
     .card{padding:18px}
     h1{font-size:24px}
-    #countBox{font-size:48px;padding:15px 25px}
-    #spaceBtn{padding:16px 30px;font-size:18px;min-width:150px}
+    #countBox{font-size:40px;padding:12px 20px}
+    #spaceBtn{padding:16px 30px;font-size:18px;min-width:200px}
     .header-row{flex-direction:column;align-items:flex-start}
     .stats-bar{gap:15px}
-    .features-bar{gap:10px}
-    .achievements-grid{grid-template-columns:1fr}
+    .countdown-overlay{font-size:60px}
+    .sound-toggle{top:15px;right:60px}
+    .result-stats{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -129,46 +134,50 @@
 <div class="card" role="main" aria-label="Space Power">
   <div class="particles" id="particles"></div>
   
-  <!-- Sound Toggle -->
-  <button class="sound-toggle" id="soundToggle" title="Toggle Sound">🔊</button>
+  <button class="sound-toggle" id="soundToggle" aria-label="Turn off sound effects">🔊</button>
   
   <h1>🚀 Space Power Tracker</h1>
 
-  <!-- Theme selector -->
   <div class="header-row">
     <div class="theme-selector">
-      <div class="theme-btn active" data-theme="dark" title="Dark Theme"></div>
-      <div class="theme-btn" data-theme="light" title="Light Theme"></div>
-      <div class="theme-btn" data-theme="rgb" title="RGB Theme"></div>
-      <div class="theme-btn" data-theme="neon" title="Neon Theme"></div>
-      <div class="theme-btn" data-theme="matrix" title="Matrix Theme"></div>
+      <div class="theme-btn active" data-theme="dark" title="Dark Theme" aria-label="Dark Theme"></div>
+      <div class="theme-btn" data-theme="light" title="Light Theme" aria-label="Light Theme"></div>
+      <div class="theme-btn" data-theme="rgb" title="RGB Theme" aria-label="RGB Theme"></div>
+      <div class="theme-btn" data-theme="neon" title="Neon Theme" aria-label="Neon Theme"></div>
+      <div class="theme-btn" data-theme="matrix" title="Matrix Theme" aria-label="Matrix Theme"></div>
     </div>
     <div style="font-size:14px;color:var(--muted);display:flex;align-items:center;gap:5px">
       <span>🔥 Trending Worldwide</span>
     </div>
   </div>
 
-  <!-- name row -->
   <div class="row">
     <label style="min-width:70px;color:var(--muted);font-weight:600">Player Name</label>
-    <input id="mainName" placeholder="Enter your name for global ranking"/>
-    <button id="prefillBtn" title="Fill last named" style="background:rgba(255,255,255,0.1);color:inherit">Load Last</button>
+    <input id="mainName" placeholder="Enter your name for global ranking" maxlength="50" aria-label="Enter your player name"/>
+    <button id="prefillBtn" title="Fill last named" style="background:rgba(255,255,255,0.1);color:inherit" aria-label="Load last used name">Load Last</button>
   </div>
 
-  <!-- Daily Challenge -->
-  <div class="daily-challenge" id="dailyChallenge">
-    <div class="challenge-title">🎯 Daily Challenge</div>
-    <div class="challenge-desc" id="challengeDesc">Score 50 points in 30 seconds</div>
-    <div class="challenge-progress">
-      <span id="challengeProgressText">0/50</span>
-      <div class="challenge-bar">
-        <div class="challenge-progress-inner" id="challengeProgressBar" style="width:0%"></div>
-      </div>
-      <span id="challengeTime">30s</span>
-    </div>
+  <div class="country-selector">
+    <img id="selectedFlag" src="https://flagcdn.com/w40/in.png" class="country-flag" alt="India flag">
+    <select id="countrySelect" class="country-dropdown" aria-label="Country selector, currently selected: India">
+      <option value="IN">India</option>
+      <option value="US">United States</option>
+      <option value="GB">United Kingdom</option>
+      <option value="CA">Canada</option>
+      <option value="AU">Australia</option>
+      <option value="DE">Germany</option>
+      <option value="FR">France</option>
+      <option value="BR">Brazil</option>
+      <option value="JP">Japan</option>
+      <option value="KR">South Korea</option>
+      <option value="CN">China</option>
+      <option value="RU">Russia</option>
+      <option value="IT">Italy</option>
+      <option value="ES">Spain</option>
+      <option value="MX">Mexico</option>
+    </select>
   </div>
 
-  <!-- Stats Bar -->
   <div class="stats-bar">
     <div class="stat-item">
       <div class="stat-value" id="statPresses">0</div>
@@ -189,120 +198,119 @@
   </div>
 
   <div style="text-align:center;margin-top:10px">
-    <div id="countBox">0</div>
+    <div id="countBox" aria-live="polite" aria-label="Current count: 0">0</div>
   </div>
 
-  <!-- Feature Buttons -->
-  <div class="features-bar">
-    <button class="feature-btn" id="achievementsBtn">🏆 Achievements</button>
-    <button class="feature-btn" id="shareBtn">📤 Share Score</button>
-    <button class="feature-btn" id="historyBtn">📊 My History</button>
-    <button class="feature-btn" id="helpBtn">❓ How to Play</button>
-  </div>
-
-  <!-- Main Controls - Space button centered -->
   <div class="controls-main">
-    <button id="spaceBtn">🎯 PRESS SPACE</button>
+    <button id="spaceBtn" aria-label="Press Space or Click to increment count">🎯 PRESS SPACE</button>
   </div>
 
-  <!-- Secondary Controls - Start/End below Space -->
   <div class="controls-secondary">
-    <button id="startBtn" style="background:linear-gradient(145deg, #10b981, #059669);color:#fff;">▶ Start Game</button>
-    <button id="endBtn" disabled style="background:linear-gradient(145deg, #ef4444, #dc2626);color:#fff;">⏹ End Game</button>
-    <button id="resetBtn" style="background:rgba(255,255,255,0.1);color:inherit;">🔄 Reset</button>
+    <button id="startBtn" aria-label="Start the game">▶ Start Game</button>
+    <button id="endBtn" disabled aria-label="End the game">⏹ End Game</button>
+    <button id="resetBtn" aria-label="Reset current game">🔄 Reset</button>
   </div>
 
-  <div class="hint">Press the <strong>SPACE</strong> key or tap the SPACE button. Hold will NOT increase count — press repeatedly for maximum speed!</div>
+  <div class="hint">Press <strong>SPACE</strong> or tap the button. Only one input counts at a time to prevent cheating!</div>
 
-  <!-- Achievements Preview -->
-  <div style="margin-top:20px;display:none" id="achievementsSection">
-    <strong style="font-size:16px">🎖 Your Achievements</strong>
-    <div class="achievements-grid" id="achievementsGrid"></div>
-  </div>
-
-  <!-- local leaderboard preview -->
   <div style="margin-top:20px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
       <strong style="font-size:16px">🏆 Global Top 10</strong>
-      <button id="refreshLeaderboard" style="background:rgba(255,255,255,0.05);color:inherit;padding:6px 10px;font-size:12px">Refresh</button>
+      <button id="refreshLeaderboard" style="background:rgba(255,255,255,0.05);color:inherit;padding:6px 10px;font-size:12px" aria-label="Refresh leaderboard">Refresh</button>
     </div>
     <div class="leaderboard" id="leaderboardPreview"></div>
   </div>
 </div>
 
-<!-- Notification -->
-<div class="notification" id="notification">
-  <div class="notification-icon">🎉</div>
-  <div>
-    <div id="notificationTitle">Achievement Unlocked!</div>
-    <div id="notificationDesc" style="font-size:12px;color:var(--muted)">You unlocked an achievement</div>
+<div id="customConfirm" class="custom-confirm" style="display:none" role="dialog" aria-labelledby="confirmTitle" aria-modal="true">
+  <div class="confirm-box">
+    <h3 style="margin-top:0" id="confirmTitle">Confirm Action</h3>
+    <p id="confirmMessage">Are you sure you want to proceed?</p>
+    <div class="confirm-buttons">
+      <button class="confirm-btn confirm-yes" id="confirmYes">Yes</button>
+      <button class="confirm-btn confirm-no" id="confirmNo">No</button>
+    </div>
   </div>
 </div>
 
-<!-- Name Modal -->
-<div id="nameModal" class="modal-bg" style="display:none">
-  <div class="modal" role="dialog">
-    <button class="close-x" id="modalX">✕</button>
-    <h3 style="margin-top:0">Enter Your Name</h3>
+<div id="countdownOverlay" class="countdown-overlay" style="display:none">
+  <div id="countdownText">3</div>
+</div>
+
+<div id="nameModal" class="modal-bg" style="display:none" aria-modal="true">
+  <div class="modal" role="dialog" aria-labelledby="modalTitle">
+    <button class="close-x" id="modalX" aria-label="Close modal">✕</button>
+    <h3 style="margin-top:0" id="modalTitle">Enter Your Name</h3>
     <p style="font-size:14px;color:var(--muted)">Enter your name to appear in the global leaderboard. Or press ✕ to play anonymously.</p>
-    <input id="modalInput" placeholder="Your name" style="width:100%;box-sizing:border-box"/>
+    <input id="modalInput" placeholder="Your name" style="width:100%;box-sizing:border-box" maxlength="50" aria-label="Enter your name"/>
     <div class="error" id="modalError">Please enter a name or press ✕ to skip.</div>
     <div style="text-align:right;margin-top:15px">
-      <button id="modalStart" style="background:linear-gradient(145deg, #10b981, #059669);color:#fff;padding:10px 20px;border-radius:8px;font-weight:600">Start Game</button>
+      <button id="modalStart" aria-label="Start game with entered name">Start Game</button>
     </div>
   </div>
 </div>
 
-<!-- result modal -->
-<div id="resultModal" class="modal-bg" style="display:none">
-  <div class="modal" role="dialog">
-    <button class="close-x" id="resultClose">✕</button>
-    <h3 style="margin-top:0">🎊 Game Results</h3>
-    <div style="display:flex;gap:15px;flex-direction:column">
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><div style="font-weight:600">Player Name</div><div id="resName"></div></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><div style="font-weight:600">Total Presses</div><div id="resPresses"></div></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><div style="font-weight:600">Time</div><div id="resTime"></div></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><div style="font-weight:600">Presses Per Second</div><div id="resRate"></div></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0"><div style="font-weight:600">Global Rank</div><div id="resRank"></div></div>
-      
-      <!-- Social Share in Result Modal -->
-      <div style="text-align:center;margin:10px 0">
-        <strong>Share your score!</strong>
-        <div class="social-share">
-          <div class="share-btn twitter" onclick="shareScore('twitter')">🐦</div>
-          <div class="share-btn whatsapp" onclick="shareScore('whatsapp')">💬</div>
-          <div class="share-btn facebook" onclick="shareScore('facebook')">📘</div>
-          <div class="share-btn link" onclick="copyScoreLink()">🔗</div>
-        </div>
+<div id="resultModal" class="modal-bg" style="display:none" aria-modal="true">
+  <div class="modal" role="dialog" aria-labelledby="resultTitle">
+    <button class="close-x" id="resultClose" aria-label="Close results">✕</button>
+    <h3 style="margin-top:0" id="resultTitle">🎊 Game Results</h3>
+    
+    <div class="result-stats">
+      <div class="stat-card">
+        <div class="stat-card-value" id="resPresses">0</div>
+        <div class="stat-card-label">Total Presses</div>
       </div>
-      
-      <div style="margin-top:10px"><strong style="font-size:16px">🏆 Global Top 10</strong></div>
-      <div id="leaderboard" class="leaderboard"></div>
-      <canvas id="resultChart" style="margin-top:15px;display:none;background:rgba(255,255,255,0.02);border-radius:8px;padding:10px"></canvas>
+      <div class="stat-card">
+        <div class="stat-card-value" id="resTime">0s</div>
+        <div class="stat-card-label">Time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="resRate">0.0/sec</div>
+        <div class="stat-card-label">Speed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="resRank">-</div>
+        <div class="stat-card-label">Global Rank</div>
+      </div>
+    </div>
+    
+    <div style="margin:15px 0;padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;text-align:center">
+      <strong>Player: </strong><span id="resName"></span>
+    </div>
+    
+    <div class="result-actions">
+      <button class="restart-btn" id="restartGame" aria-label="Play again">🔄 Play Again</button>
+    </div>
+    
+    <div style="margin-top:15px">
+      <strong style="font-size:16px">🏆 Global Top 10</strong>
+      <div id="leaderboard" class="leaderboard" style="max-height:300px"></div>
     </div>
   </div>
 </div>
 
-<!-- Confetti Container -->
 <div id="confettiContainer" class="confetti"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 /* CONFIG */
-const API_ENDPOINT = ''; // optional: your server URL to POST final results
-const STORAGE_KEY = 'sp_submissions_v3';
-const QUEUE_KEY = 'sp_queue_v3';
-const LAST_NAME_KEY = 'sp_last_name_v3';
-const ACHIEVEMENTS_KEY = 'sp_achievements_v3';
-const DAILY_CHALLENGE_KEY = 'sp_daily_challenge_v3';
+const API_ENDPOINT = 'https://api.x.ai/v1/submit'; // Replace with your actual API endpoint
+const STORAGE_KEY = 'sp_submissions_v7';
+const QUEUE_KEY = 'sp_queue_v7';
+const LAST_NAME_KEY = 'sp_last_name_v7';
+const USER_COUNTRY_KEY = 'sp_user_country_v7';
+const THEME_KEY = 'sp_theme';
 
 /* STATE */
-let playing=false, count=0, startTime=0, stamps=[], lastSpace=false;
-let lastClickTs=0, lastSaveTs=0, timerInterval=null;
+let playing = false, count = 0, startTime = 0, stamps = [], lastSpace = false;
+let lastInputTs = 0, lastSaveTs = 0, timerInterval = null;
+let inputLock = false, lastInputType = null;
+let userCountry = 'IN';
 let soundEnabled = true;
-let dailyChallenge = null;
+let audioContext = null;
+let queueProcessing = false;
+let currentModal = null;
 
-/* DOM */
+/* DOM Elements */
 const modal = document.getElementById('nameModal');
 const modalX = document.getElementById('modalX');
 const modalInput = document.getElementById('modalInput');
@@ -324,7 +332,6 @@ const resPresses = document.getElementById('resPresses');
 const resTime = document.getElementById('resTime');
 const resRate = document.getElementById('resRate');
 const resRank = document.getElementById('resRank');
-const resultChart = document.getElementById('resultChart');
 const confettiContainer = document.getElementById('confettiContainer');
 const refreshLeaderboard = document.getElementById('refreshLeaderboard');
 const statPresses = document.getElementById('statPresses');
@@ -332,498 +339,581 @@ const statRate = document.getElementById('statRate');
 const statTime = document.getElementById('statTime');
 const statRank = document.getElementById('statRank');
 const particlesEl = document.getElementById('particles');
+const countdownOverlay = document.getElementById('countdownOverlay');
+const countdownText = document.getElementById('countdownText');
+const customConfirm = document.getElementById('customConfirm');
+const confirmTitle = document.getElementById('confirmTitle');
+const confirmMessage = document.getElementById('confirmMessage');
+const confirmYes = document.getElementById('confirmYes');
+const confirmNo = document.getElementById('confirmNo');
+const countrySelect = document.getElementById('countrySelect');
+const selectedFlag = document.getElementById('selectedFlag');
 const soundToggle = document.getElementById('soundToggle');
-const achievementsBtn = document.getElementById('achievementsBtn');
-const achievementsSection = document.getElementById('achievementsSection');
-const achievementsGrid = document.getElementById('achievementsGrid');
-const shareBtn = document.getElementById('shareBtn');
-const dailyChallengeEl = document.getElementById('dailyChallenge');
-const challengeDesc = document.getElementById('challengeDesc');
-const challengeProgressText = document.getElementById('challengeProgressText');
-const challengeProgressBar = document.getElementById('challengeProgressBar');
-const challengeTime = document.getElementById('challengeTime');
-const notification = document.getElementById('notification');
-const notificationTitle = document.getElementById('notificationTitle');
-const notificationDesc = document.getElementById('notificationDesc');
+const restartGame = document.getElementById('restartGame');
 
 /* COUNTRY FLAGS DATA */
 const countryFlags = {
-  'US': '🇺🇸', 'IN': '🇮🇳', 'GB': '🇬🇧', 'CA': '🇨🇦', 'AU': '🇦🇺',
-  'DE': '🇩🇪', 'FR': '🇫🇷', 'BR': '🇧🇷', 'JP': '🇯🇵', 'KR': '🇰🇷',
-  'CN': '🇨🇳', 'RU': '🇷🇺', 'IT': '🇮🇹', 'ES': '🇪🇸', 'MX': '🇲🇽',
-  'NL': '🇳🇱', 'SE': '🇸🇪', 'NO': '🇳🇴', 'DK': '🇩🇰', 'FI': '🇫🇮',
-  'PL': '🇵🇱', 'TR': '🇹🇷', 'SA': '🇸🇦', 'AE': '🇦🇪', 'ZA': '🇿🇦',
-  'NG': '🇳🇬', 'EG': '🇪🇬', 'KE': '🇰🇪', 'IL': '🇮🇱', 'SG': '🇸🇬',
-  'MY': '🇲🇾', 'TH': '🇹🇭', 'ID': '🇮🇩', 'PH': '🇵🇭', 'VN': '🇻🇳',
-  'AR': '🇦🇷', 'CL': '🇨🇱', 'CO': '🇨🇴', 'PE': '🇵🇪', 'NZ': '🇳🇿'
+  'US': 'https://flagcdn.com/w40/us.png', 'IN': 'https://flagcdn.com/w40/in.png', 'GB': 'https://flagcdn.com/w40/gb.png',
+  'CA': 'https://flagcdn.com/w40/ca.png', 'AU': 'https://flagcdn.com/w40/au.png', 'DE': 'https://flagcdn.com/w40/de.png',
+  'FR': 'https://flagcdn.com/w40/fr.png', 'BR': 'https://flagcdn.com/w40/br.png', 'JP': 'https://flagcdn.com/w40/jp.png',
+  'KR': 'https://flagcdn.com/w40/kr.png', 'CN': 'https://flagcdn.com/w40/cn.png', 'RU': 'https://flagcdn.com/w40/ru.png',
+  'IT': 'https://flagcdn.com/w40/it.png', 'ES': 'https://flagcdn.com/w40/es.png', 'MX': 'https://flagcdn.com/w40/mx.png'
 };
 
-/* ACHIEVEMENTS DATA */
-const achievements = [
-  { id: 'first_game', title: 'First Steps', desc: 'Complete your first game', icon: '🚀', target: 1, type: 'games' },
-  { id: 'speed_demon', title: 'Speed Demon', desc: 'Achieve 5 presses per second', icon: '⚡', target: 5, type: 'rate' },
-  { id: 'marathon', title: 'Marathon Runner', desc: 'Play for more than 1 minute', icon: '🏃', target: 60, type: 'time' },
-  { id: 'centurion', title: 'Centurion', desc: 'Score 100 points in a game', icon: '💯', target: 100, type: 'score' },
-  { id: 'pro_player', title: 'Pro Player', desc: 'Play 10 games', icon: '🎮', target: 10, type: 'games' },
-  { id: 'top_rank', title: 'Top Rank', desc: 'Reach top 3 in global ranking', icon: '🥇', target: 3, type: 'rank' },
-  { id: 'daily_champ', title: 'Daily Champion', desc: 'Complete a daily challenge', icon: '🏅', target: 1, type: 'challenge' },
-  { id: 'social_butterfly', title: 'Social Butterfly', desc: 'Share your score 3 times', icon: '📤', target: 3, type: 'shares' }
-];
+const countryNames = {
+  'US': 'United States', 'IN': 'India', 'GB': 'United Kingdom', 'CA': 'Canada', 'AU': 'Australia',
+  'DE': 'Germany', 'FR': 'France', 'BR': 'Brazil', 'JP': 'Japan', 'KR': 'South Korea',
+  'CN': 'China', 'RU': 'Russia', 'IT': 'Italy', 'ES': 'Spain', 'MX': 'Mexico'
+};
 
-/* DAILY CHALLENGES */
-const dailyChallenges = [
-  { id: 'speed_run', title: 'Speed Run', desc: 'Score 50 points in 30 seconds', target: 50, time: 30 },
-  { id: 'endurance', title: 'Endurance', desc: 'Score 100 points in 60 seconds', target: 100, time: 60 },
-  { id: 'precision', title: 'Precision', desc: 'Achieve 4.0 presses per second', target: 4.0, time: 0, type: 'rate' }
-];
+/* NOTIFICATION SYSTEM */
+function showNotification(message, type = 'error') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type === 'success' ? 'success' : ''}`;
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    setTimeout(() => notification.remove(), 500);
+  }, 3000);
+}
 
-/* SOUNDS */
+/* FOCUS TRAPPING FOR MODALS */
+function trapFocus(modalElement, firstFocusable) {
+  const focusableElements = modalElement.querySelectorAll('button, [href], input, select, textarea');
+  const first = firstFocusable || focusableElements[0];
+  const last = focusableElements[focusableElements.length - 1];
+  
+  const handleKeydown = (e) => {
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    } else if (e.key === 'Escape') {
+      closeCurrentModal();
+    }
+  };
+  
+  modalElement.addEventListener('keydown', handleKeydown);
+  return () => modalElement.removeEventListener('keydown', handleKeydown);
+}
+
+function closeCurrentModal() {
+  if (currentModal) {
+    currentModal.style.display = 'none';
+    if (soundEnabled) playSound('click');
+    currentModal = null;
+    document.removeEventListener('keydown', handleGlobalEscape);
+  }
+}
+
+function handleGlobalEscape(e) {
+  if (e.key === 'Escape') {
+    closeCurrentModal();
+  }
+}
+
+function showModal(modalElement, focusElement) {
+  currentModal = modalElement;
+  modalElement.style.display = 'flex';
+  if (focusElement) focusElement.focus();
+  const removeTrap = trapFocus(modalElement, focusElement);
+  document.addEventListener('keydown', handleGlobalEscape);
+  
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'style' && modalElement.style.display === 'none') {
+        removeTrap();
+        document.removeEventListener('keydown', handleGlobalEscape);
+        observer.disconnect();
+      }
+    });
+  });
+  observer.observe(modalElement, { attributes: true });
+}
+
+/* SOUND SYSTEM */
+function initAudio() {
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    const resumeAudio = () => {
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      document.removeEventListener('click', resumeAudio);
+      document.removeEventListener('keydown', resumeAudio);
+    };
+    
+    document.addEventListener('click', resumeAudio, { once: true });
+    document.addEventListener('keydown', resumeAudio, { once: true });
+  } catch (e) {
+    soundEnabled = false;
+    soundToggle.textContent = '🔇';
+    soundToggle.setAttribute('aria-label', 'Sound effects not supported');
+    showNotification('Sound effects not supported on this device', 'error');
+  }
+}
+
 function playSound(type) {
-  if (!soundEnabled) return;
+  if (!soundEnabled || !audioContext) return;
   
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  
-  if (type === 'press') {
+  try {
+    if (audioContext.state === 'suspended') {
+      audioContext.resume();
+    }
+    
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
     
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
     
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(300, audioContext.currentTime + 0.1);
+    const frequencies = {
+      'click': 800, 'start': 523.25, 'end': 392.00, 
+      'countdown': 659.25, 'modal': 440, 'restart': 587.33
+    };
     
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+    oscillator.frequency.setValueAtTime(frequencies[type] || 440, audioContext.currentTime);
+    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
     
-    oscillator.start(audioContext.currentTime);
+    oscillator.start();
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
     oscillator.stop(audioContext.currentTime + 0.1);
-  } else if (type === 'achievement') {
-    // Achievement sound - a little fanfare
-    const times = [0, 0.1, 0.2, 0.3, 0.4];
-    const frequencies = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C, E, G, C, E
-    
-    times.forEach((time, i) => {
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      oscillator.frequency.setValueAtTime(frequencies[i], audioContext.currentTime + time);
-      
-      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime + time);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + time + 0.3);
-      
-      oscillator.start(audioContext.currentTime + time);
-      oscillator.stop(audioContext.currentTime + time + 0.3);
-    });
+  } catch (e) {
+    console.log('Sound error:', e);
   }
 }
 
-/* NOTIFICATION SYSTEM */
-function showNotification(title, description) {
-  notificationTitle.textContent = title;
-  notificationDesc.textContent = description;
-  notification.classList.add('show');
-  
-  setTimeout(() => {
-    notification.classList.remove('show');
-  }, 3000);
+/* CUSTOM CONFIRM DIALOG */
+function showConfirm(title, message) {
+  return new Promise((resolve) => {
+    confirmTitle.textContent = title;
+    confirmMessage.textContent = message;
+    showModal(customConfirm, confirmYes);
+    
+    if (soundEnabled) playSound('modal');
+    
+    const yesHandler = () => {
+      customConfirm.style.display = 'none';
+      confirmYes.removeEventListener('click', yesHandler);
+      confirmNo.removeEventListener('click', noHandler);
+      resolve(true);
+    };
+    
+    const noHandler = () => {
+      customConfirm.style.display = 'none';
+      confirmYes.removeEventListener('click', yesHandler);
+      confirmNo.removeEventListener('click', noHandler);
+      resolve(false);
+    };
+    
+    confirmYes.addEventListener('click', yesHandler);
+    confirmNo.addEventListener('click', noHandler);
+  });
 }
 
-/* THEME SYSTEM */
+/* COUNTRY SELECTION */
+function updateCountryFlag() {
+  const countryCode = countrySelect.value;
+  userCountry = countryCode;
+  selectedFlag.src = countryFlags[countryCode];
+  selectedFlag.alt = countryNames[countryCode] + ' flag';
+  countrySelect.setAttribute('aria-label', `Country selector, currently selected: ${countryNames[countryCode]}`);
+  localStorage.setItem(USER_COUNTRY_KEY, countryCode);
+}
+
+countrySelect.addEventListener('change', updateCountryFlag);
+
+/* THEME SYSTEM WITH SYSTEM PREFERENCE */
+function applySystemTheme() {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.body.setAttribute('data-theme', 'dark');
+    document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector('.theme-btn[data-theme="dark"]').classList.add('active');
+    localStorage.setItem(THEME_KEY, 'dark');
+  }
+}
+
 document.querySelectorAll('.theme-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const theme = btn.getAttribute('data-theme');
     document.body.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_KEY, theme);
     document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    
-    // Add particles for specific themes
     createParticles();
   });
 });
 
-/* PARTICLE EFFECT */
+/* CSS-BASED PARTICLE EFFECT */
 function createParticles() {
-  particlesEl.innerHTML = '';
   const theme = document.body.getAttribute('data-theme');
-  if (theme === 'rgb' || theme === 'neon' || theme === 'matrix') {
-    const count = theme === 'matrix' ? 100 : 50;
-    for (let i = 0; i < count; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      particle.style.width = Math.random() * 4 + 1 + 'px';
-      particle.style.height = particle.style.width;
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.top = Math.random() * 100 + '%';
-      particle.style.animation = `float ${Math.random() * 20 + 10}s linear infinite`;
-      
-      if (theme === 'matrix') {
-        particle.style.background = '#00ff41';
-        particle.style.boxShadow = '0 0 8px #00ff41';
-      } else if (theme === 'neon') {
-        particle.style.background = '#00f7ff';
-        particle.style.boxShadow = '0 0 8px #00f7ff';
-      } else {
-        const colors = ['#ff4e50', '#f9d423', '#1fa2ff'];
-        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-      }
-      
-      particlesEl.appendChild(particle);
-    }
-    
-    // Add CSS animation for particles
-    if (!document.getElementById('particle-styles')) {
-      const style = document.createElement('style');
-      style.id = 'particle-styles';
-      style.textContent = `
-        @keyframes float {
-          0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { transform: translateY(-1000%) rotate(360deg); opacity: 0; }
-        }
-      `;
-      document.head.appendChild(style);
-    }
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+  if ((theme === 'rgb' || theme === 'neon' || theme === 'matrix') && !isMobile) {
+    particlesEl.style.display = 'block';
+  } else {
+    particlesEl.style.display = 'none';
   }
+}
+
+/* NAME VALIDATION */
+function validateName(name) {
+  return /^[a-zA-Z0-9\s]{1,50}$/.test(name);
 }
 
 /* HELPERS */
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-function loadSubmissions(){ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-function saveSubmissions(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
-
-function getRandomCountryCode() {
-  const codes = Object.keys(countryFlags);
-  return codes[Math.floor(Math.random() * codes.length)];
+function escapeHtml(s) {
+  if (typeof s !== 'string') return '';
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-/* ACHIEVEMENTS SYSTEM */
-function loadAchievements() {
-  return JSON.parse(localStorage.getItem(ACHIEVEMENTS_KEY) || '{}');
-}
-
-function saveAchievements(achievementsObj) {
-  localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievementsObj));
-}
-
-function checkAchievements(type, value) {
-  const userAchievements = loadAchievements();
-  let unlocked = [];
-  
-  achievements.forEach(achievement => {
-    if (achievement.type === type) {
-      if (!userAchievements[achievement.id]) {
-        userAchievements[achievement.id] = 0;
-      }
-      
-      const newValue = Math.min(achievement.target, userAchievements[achievement.id] + value);
-      userAchievements[achievement.id] = newValue;
-      
-      if (newValue >= achievement.target && userAchievements[achievement.id] !== achievement.target) {
-        // Achievement unlocked!
-        userAchievements[achievement.id] = achievement.target;
-        unlocked.push(achievement);
-        
-        // Show notification
-        showNotification('Achievement Unlocked!', achievement.title);
-        
-        // Play sound
-        playSound('achievement');
-      }
-    }
-  });
-  
-  saveAchievements(userAchievements);
-  updateAchievementsDisplay();
-  return unlocked;
-}
-
-function updateAchievementsDisplay() {
-  const userAchievements = loadAchievements();
-  achievementsGrid.innerHTML = '';
-  
-  achievements.forEach(achievement => {
-    const progress = userAchievements[achievement.id] || 0;
-    const percent = (progress / achievement.target) * 100;
-    
-    const achievementEl = document.createElement('div');
-    achievementEl.className = 'achievement-item';
-    achievementEl.innerHTML = `
-      <div class="achievement-icon">${achievement.icon}</div>
-      <div class="achievement-info">
-        <div class="achievement-title">${achievement.title}</div>
-        <div class="achievement-desc">${achievement.desc}</div>
-        <div class="achievement-progress">
-          <div class="achievement-progress-bar" style="width: ${percent}%"></div>
-        </div>
-      </div>
-    `;
-    
-    if (progress >= achievement.target) {
-      achievementEl.style.background = 'rgba(255,215,0,0.1)';
-      achievementEl.style.border = '1px solid gold';
-    }
-    
-    achievementsGrid.appendChild(achievementEl);
-  });
-}
-
-/* DAILY CHALLENGE SYSTEM */
-function getDailyChallenge() {
-  const today = new Date().toDateString();
-  const saved = localStorage.getItem(DAILY_CHALLENGE_KEY);
-  
-  if (saved) {
-    const data = JSON.parse(saved);
-    if (data.date === today) {
-      return data.challenge;
-    }
-  }
-  
-  // New challenge for today
-  const challenge = dailyChallenges[Math.floor(Math.random() * dailyChallenges.length)];
-  localStorage.setItem(DAILY_CHALLENGE_KEY, JSON.stringify({
-    date: today,
-    challenge: challenge,
-    progress: 0
-  }));
-  
-  return challenge;
-}
-
-function updateDailyChallengeProgress(presses, time, rate) {
-  const today = new Date().toDateString();
-  const saved = JSON.parse(localStorage.getItem(DAILY_CHALLENGE_KEY) || '{}');
-  
-  if (saved.date !== today) return;
-  
-  const challenge = saved.challenge;
-  let progress = saved.progress || 0;
-  
-  if (challenge.type === 'rate') {
-    progress = Math.max(progress, rate);
-  } else {
-    progress = Math.max(progress, presses);
-  }
-  
-  localStorage.setItem(DAILY_CHALLENGE_KEY, JSON.stringify({
-    date: today,
-    challenge: challenge,
-    progress: progress
-  }));
-  
-  // Update UI
-  challengeDesc.textContent = challenge.desc;
-  challengeProgressText.textContent = `${Math.round(progress)}/${challenge.target}`;
-  challengeProgressBar.style.width = `${Math.min(100, (progress / challenge.target) * 100)}%`;
-  challengeTime.textContent = challenge.time > 0 ? `${challenge.time}s` : 'Any time';
-  
-  // Check if challenge completed
-  if (progress >= challenge.target && !saved.completed) {
-    saved.completed = true;
-    localStorage.setItem(DAILY_CHALLENGE_KEY, JSON.stringify(saved));
-    
-    // Award achievement
-    checkAchievements('challenge', 1);
-    showNotification('Daily Challenge Complete!', `You completed: ${challenge.title}`);
+function loadSubmissions() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (!data) return [];
+    const parsed = JSON.parse(data);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    showNotification('Failed to load leaderboard data', 'error');
+    return [];
   }
 }
 
-/* SOCIAL SHARING */
-function shareScore(platform) {
-  const player = mainName.value.trim() || 'Anonymous';
-  const score = count;
-  const rank = statRank.textContent;
-  
-  const text = `I scored ${score} points in Space Power! ${rank ? `My global rank: ${rank}` : ''} 🚀\n\nCan you beat me? #SpacePower #ClickChallenge`;
-  const url = window.location.href;
-  
-  let shareUrl = '';
-  
-  switch(platform) {
-    case 'twitter':
-      shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
-      break;
-    case 'whatsapp':
-      shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
-      break;
-    case 'facebook':
-      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
-      break;
-  }
-  
-  if (shareUrl) {
-    window.open(shareUrl, '_blank', 'width=600,height=400');
-    checkAchievements('shares', 1);
-  }
-}
-
-function copyScoreLink() {
-  const text = `I scored ${count} points in Space Power! 🚀\n\nCan you beat me? ${window.location.href} #SpacePower`;
-  
-  navigator.clipboard.writeText(text).then(() => {
-    showNotification('Copied!', 'Score link copied to clipboard');
-    checkAchievements('shares', 1);
-  });
-}
-
-/* CONFETTI EFFECT */
-function createConfetti() {
-  confettiContainer.innerHTML = '';
-  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff9900', '#ff00cc'];
-  for(let i=0; i<200; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.left = Math.random() * 100 + 'vw';
-    piece.style.top = '-10px';
-    piece.style.width = Math.random() * 12 + 6 + 'px';
-    piece.style.height = piece.style.width;
-    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-    
-    const animation = piece.animate([
-      { top: '-10px', opacity: 1, transform: `rotate(0deg) scale(1)` },
-      { top: Math.random() * 100 + 50 + 'vh', opacity: 0, transform: `rotate(${Math.random() * 720}deg) scale(0.5)` }
-    ], {
-      duration: 2000 + Math.random() * 3000,
-      easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
-    });
-    
-    confettiContainer.appendChild(piece);
-    animation.onfinish = () => piece.remove();
-  }
-}
-
-// ... (Rest of the code remains the same as previous version, but integrated with new features)
-
-/* SOUND TOGGLE */
-soundToggle.addEventListener('click', () => {
-  soundEnabled = !soundEnabled;
-  soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
-  soundToggle.title = soundEnabled ? 'Sound On' : 'Sound Off';
-});
-
-/* ACHIEVEMENTS BUTTON */
-achievementsBtn.addEventListener('click', () => {
-  achievementsSection.style.display = achievementsSection.style.display === 'none' ? 'block' : 'none';
-});
-
-/* SHARE BUTTON */
-shareBtn.addEventListener('click', () => {
-  if (count > 0) {
-    // Show share options in a modal or directly share
-    const player = mainName.value.trim() || 'Anonymous';
-    const text = `I scored ${count} points in Space Power! 🚀\n\nCan you beat me? ${window.location.href} #SpacePower`;
-    
-    if (navigator.share) {
-      navigator.share({
-        title: 'Space Power Score',
-        text: text,
-        url: window.location.href,
-      })
-      .then(() => checkAchievements('shares', 1))
-      .catch(console.error);
+function saveSubmissions(arr) {
+  try {
+    const limitedArr = arr.slice(-800);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(limitedArr));
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      showNotification('Storage full, keeping recent scores only', 'error');
+      const limitedArr = arr.slice(-400);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(limitedArr));
     } else {
-      // Fallback to copy to clipboard
-      copyScoreLink();
+      showNotification('Failed to save scores locally', 'error');
     }
-  } else {
-    showNotification('No Score to Share', 'Play a game first to share your score!');
   }
-});
-
-/* INITIALIZATION */
-function init() {
-  setInterval(processQueue, 10000);
-  updateLeaderboardPreview();
-  createParticles();
-  updateAchievementsDisplay();
-  
-  // Load daily challenge
-  dailyChallenge = getDailyChallenge();
-  updateDailyChallengeProgress(0, 0, 0);
-  
-  // Preload last name
-  const last = localStorage.getItem(LAST_NAME_KEY);
-  if(last) mainName.value = last;
 }
 
-// Initialize the app
-init();
+/* COUNTDOWN FUNCTION */
+function startCountdown() {
+  return new Promise((resolve) => {
+    countdownOverlay.style.display = 'flex';
+    let count = 3;
+    
+    const countdownInterval = setInterval(() => {
+      if (count > 0) {
+        countdownText.textContent = count;
+        if (soundEnabled) playSound('countdown');
+        count--;
+      } else {
+        countdownText.textContent = 'GO!';
+        if (soundEnabled) playSound('start');
+        setTimeout(() => {
+          countdownOverlay.style.display = 'none';
+          clearInterval(countdownInterval);
+          resolve();
+        }, 500);
+      }
+    }, 1000);
+  });
+}
 
-// ... (The rest of your existing JavaScript code for game functionality goes here)
-// Note: I've kept the core game logic the same but integrated the new features
+/* CSS-BASED CONFETTI EFFECT */
+function createConfetti() {
+  confettiContainer.style.animation = 'confettiFall 2s ease-out forwards';
+  setTimeout(() => {
+    confettiContainer.style.animation = '';
+  }, 2000);
+}
 
-/* MODAL LOGIC */
-startBtn.addEventListener('click', () => {
-  const nm = mainName.value.trim();
-  if(!nm){
-    modal.style.display = 'flex';
-    modalInput.value = '';
-    modalInput.focus();
+/* API QUEUE SYSTEM */
+function enqueuePayload(payload) {
+  if (!API_ENDPOINT || API_ENDPOINT.includes('api.x.ai')) {
+    showNotification('Cannot sync scores: API not configured. Saved locally.', 'error');
     return;
   }
-  beginSession(nm);
+  
+  try {
+    const q = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
+    if (q.length >= 50) {
+      q.shift();
+    }
+    
+    const sanitizedPayload = {
+      name: String(payload.name || '').substring(0, 50).replace(/[^\w\s]/gi, ''),
+      presses: Math.min(Math.max(1, parseInt(payload.presses) || 1), 99999),
+      duration_ms: Math.min(Math.max(1000, parseInt(payload.duration_ms) || 1000), 3600000),
+      stamps: (Array.isArray(payload.stamps) ? payload.stamps : [])
+        .slice(0, 50)
+        .map(s => Math.max(0, Math.min(parseInt(s) || 0, 3600000)))
+        .filter(s => s > 0 && s <= 3600000),
+      ts: Math.max(Date.now() - 86400000, Math.min(parseInt(payload.ts) || Date.now(), Date.now() + 3600000)),
+      country: countryFlags[payload.country] ? payload.country : 'US'
+    };
+    
+    if (!sanitizedPayload.name || sanitizedPayload.presses < 1 || sanitizedPayload.duration_ms < 1000 || !sanitizedPayload.stamps.length) {
+      showNotification('Invalid score data. Not saved for sync.', 'error');
+      return;
+    }
+    
+    q.push({
+      payload: sanitizedPayload,
+      tries: 0,
+      nextTry: Date.now()
+    });
+    
+    localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
+    processQueue();
+  } catch (e) {
+    console.error('Queue error:', e);
+    showNotification('Failed to save score for sync', 'error');
+  }
+}
+
+async function processQueue() {
+  if (queueProcessing || !API_ENDPOINT || API_ENDPOINT.includes('api.x.ai')) {
+    showNotification('Cannot sync scores: API not configured.', 'error');
+    return;
+  }
+  queueProcessing = true;
+  try {
+    const q = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
+    if (!q.length) {
+      queueProcessing = false;
+      return;
+    }
+    
+    const now = Date.now();
+    let processedAny = false;
+    
+    for (let i = 0; i < q.length; i++) {
+      const item = q[i];
+      if (item.nextTry > now) continue;
+      
+      if (item.tries >= 5) {
+        q.splice(i, 1);
+        i--;
+        showNotification('Some scores failed to sync after retries.', 'error');
+        continue;
+      }
+      
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        
+        const response = await fetch(API_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item.payload),
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+          q.splice(i, 1);
+          i--;
+          processedAny = true;
+          showNotification('Score synced successfully!', 'success');
+          continue;
+        }
+        
+        if (response.status === 429) {
+          showNotification('Too many requests. Retrying later.', 'error');
+          item.nextTry = now + 60000;
+        } else if (response.status >= 500) {
+          showNotification('Server error. Retrying later.', 'error');
+          item.nextTry = now + 30000;
+        } else {
+          showNotification(`Sync failed: ${response.statusText}`, 'error');
+          item.tries++;
+          item.nextTry = now + Math.min(30000, Math.pow(2, item.tries) * 2000);
+        }
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          showNotification('Network timeout. Retrying later.', 'error');
+        } else {
+          showNotification('Sync error. Retrying later.', 'error');
+        }
+        item.tries++;
+        item.nextTry = now + Math.min(30000, Math.pow(2, item.tries) * 2000);
+      }
+    }
+    
+    localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
+    
+    if (processedAny && q.length > 0) {
+      setTimeout(processQueue, 2000);
+    } else if (q.length > 0) {
+      setTimeout(processQueue, 15000);
+    }
+  } catch (e) {
+    showNotification('Failed to sync scores with server.', 'error');
+    console.error('Queue error:', e);
+    setTimeout(processQueue, 30000);
+  }
+  queueProcessing = false;
+}
+
+/* LEADERBOARD FUNCTIONS */
+function getNamedSorted() {
+  try {
+    const arr = loadSubmissions();
+    return arr
+      .filter(x => x.name && x.name !== 'Anonymous' && x.presses > 0)
+      .sort((a, b) => b.presses - a.presses || a.duration_ms - b.duration_ms);
+  } catch (e) {
+    return [];
+  }
+}
+
+function updateLeaderboard(element, data) {
+  try {
+    element.innerHTML = '';
+    if (!data.length) {
+      element.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">No submissions yet. Be the first!</div>';
+      return;
+    }
+    
+    data.forEach((p, i) => {
+      const div = document.createElement('div');
+      div.className = 'top-item';
+      div.innerHTML = `
+        <div class="rank">#${i+1}</div>
+        <div class="name">
+          <img src="${p.country ? countryFlags[p.country] : countryFlags['US']}" 
+               class="flag" alt="${countryNames[p.country] || 'United States'}" 
+               onerror="this.src='${countryFlags['US']}'">
+          ${escapeHtml(p.name)}
+        </div>
+        <div class="score">${p.presses}</div>
+      `;
+      element.appendChild(div);
+    });
+  } catch (e) {
+    element.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">Error loading leaderboard</div>';
+  }
+}
+
+function updateLeaderboardPreview() {
+  const top = getNamedSorted().slice(0, 10);
+  updateLeaderboard(leaderboardPreview, top);
+}
+
+/* MODAL LOGIC */
+startBtn.addEventListener('click', async () => {
+  if (soundEnabled) playSound('start');
+  const nm = mainName.value.trim();
+  if (!nm) {
+    showModal(modal, modalInput);
+    return;
+  }
+  
+  if (!validateName(nm)) {
+    showNotification('Name can only contain letters, numbers, and spaces', 'error');
+    return;
+  }
+  
+  await beginSession(nm);
 });
 
-modalInput.addEventListener('input', () => { modalError.style.display = 'none'; });
-
-modalStart.addEventListener('click', () => {
-  const v = modalInput.value.trim();
-  if(!v){ 
-    modalError.style.display = 'block'; 
-    return; 
+modalInput.addEventListener('input', () => {
+  modalError.style.display = 'none';
+  modalInput.value = modalInput.value.substring(0, 50);
+  if (!validateName(modalInput.value)) {
+    modalError.textContent = 'Only letters, numbers, and spaces allowed';
+    modalError.style.display = 'block';
+    modalError.classList.remove('success');
+  } else if (modalInput.value.trim()) {
+    modalError.textContent = 'Looks good!';
+    modalError.style.display = 'block';
+    modalError.classList.add('success');
   }
+});
+
+modalStart.addEventListener('click', async () => {
+  if (soundEnabled) playSound('start');
+  const v = modalInput.value.trim();
+  if (!v) {
+    modalError.textContent = 'Please enter a name or press ✕ to skip';
+    modalError.style.display = 'block';
+    modalError.classList.remove('success');
+    return;
+  }
+  
+  if (!validateName(v)) {
+    modalError.textContent = 'Only letters, numbers, and spaces allowed';
+    modalError.style.display = 'block';
+    modalError.classList.remove('success');
+    return;
+  }
+  
   mainName.value = v;
   modal.style.display = 'none';
-  beginSession(v);
+  await beginSession(v);
 });
 
-modalX.addEventListener('click', () => { 
+modalX.addEventListener('click', () => {
   modal.style.display = 'none';
   beginSession('Anonymous');
 });
 
 prefillBtn.addEventListener('click', () => {
   const last = localStorage.getItem(LAST_NAME_KEY);
-  if(last) mainName.value = last;
+  if (last) mainName.value = last;
+  if (soundEnabled) playSound('click');
 });
 
-refreshLeaderboard.addEventListener('click', updateLeaderboardPreview);
+refreshLeaderboard.addEventListener('click', () => {
+  updateLeaderboardPreview();
+  if (soundEnabled) playSound('click');
+});
 
 /* SESSION MANAGEMENT */
-function beginSession(name){
-  if(playing) return;
+async function beginSession(name) {
+  if (playing) return;
+  
+  await startCountdown();
+  
   playing = true;
   count = 0;
   stamps = [];
   startTime = Date.now();
   lastSpace = false;
+  inputLock = false;
+  lastInputType = null;
   countBox.textContent = '0';
+  countBox.setAttribute('aria-label', 'Current count: 0');
   countBox.style.width = '120px';
   endBtn.disabled = false;
   startBtn.disabled = true;
   
-  // Update stats
   statPresses.textContent = '0';
   statRate.textContent = '0.0';
   statTime.textContent = '0s';
   
-  // Start timer
-  if(timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(updateStats, 100);
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(updateStats, 200);
   
-  if(name && name !== 'Anonymous'){
-    localStorage.setItem(LAST_NAME_KEY, name);
+  if (name && name !== 'Anonymous') {
+    try {
+      localStorage.setItem(LAST_NAME_KEY, name.substring(0, 50));
+    } catch (e) {
+      console.error('Error saving name:', e);
+    }
   }
   
-  // Add achievement badge for first game
-  if(!localStorage.getItem('sp_first_game')) {
+  if (!localStorage.getItem('sp_first_game')) {
     localStorage.setItem('sp_first_game', 'true');
     setTimeout(() => {
       const badge = document.createElement('div');
@@ -845,78 +935,114 @@ function updateStats() {
   statPresses.textContent = count;
   statRate.textContent = rate;
   statTime.textContent = Math.floor(seconds) + 's';
-  
-  // Update daily challenge progress
-  updateDailyChallengeProgress(count, seconds, parseFloat(rate));
 }
 
-/* INCREMENT LOGIC */
-function increment(){
-  if(!playing) return;
-  const now = Date.now();
-  if(now - lastClickTs < 30) return;
-  lastClickTs = now;
+/* INCREMENT LOGIC WITH ENHANCED INPUT LOCK */
+function increment(inputType) {
+  if (!playing || inputLock) return;
   
-  count++; 
+  const now = Date.now();
+  if (now - lastInputTs < 30) {
+    // If another input type was recently processed, block this one
+    if (lastInputType !== inputType) {
+      showNotification('Only one input counts at a time!', 'error');
+      return;
+    }
+  }
+  
+  inputLock = true;
+  lastInputTs = now;
+  lastInputType = inputType;
+  
+  count++;
   countBox.textContent = String(count);
+  countBox.setAttribute('aria-label', `Current count: ${count}`);
   countBox.style.width = Math.max(120, 100 + String(count).length * 18) + 'px';
   stamps.push(Date.now() - startTime);
   
-  // Play sound
-  playSound('press');
+  if (soundEnabled) playSound('click');
   
-  // RANDOM COLOR EFFECT
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
-  spaceBtn.style.background = `linear-gradient(145deg, rgb(${r}, ${g}, ${b}), rgb(${r-30}, ${g-30}, ${b-30}))`;
-  
-  // AUTO-SAVE
-  if(Date.now() - lastSaveTs > 5000){
-    lastSaveTs = Date.now();
-    localStorage.setItem('sp_current', JSON.stringify({
-      name: mainName.value || 'Anonymous', 
-      count, 
-      stamps, 
-      startTime
-    }));
+  const theme = document.body.getAttribute('data-theme');
+  if (theme === 'matrix') {
+    spaceBtn.style.background = 'linear-gradient(145deg, #00ff41, #00cc33)';
+  } else if (theme === 'neon') {
+    spaceBtn.style.background = 'linear-gradient(145deg, #00f7ff, #00aaff)';
+  } else {
+    const r = Math.floor(Math.random() * 206) + 50;
+    const g = Math.floor(Math.random() * 206) + 50;
+    const b = Math.floor(Math.random() * 206) + 50;
+    spaceBtn.style.background = `linear-gradient(145deg, rgb(${r}, ${g}, ${b}), rgb(${r-30}, ${g-30}, ${b-30}))`;
   }
+  
+  if (Date.now() - lastSaveTs > 5000) {
+    lastSaveTs = Date.now();
+    try {
+      localStorage.setItem('sp_current', JSON.stringify({
+        name: (mainName.value || 'Anonymous').substring(0, 50),
+        count: Math.min(count, 99999),
+        stamps: stamps.slice(-1000),
+        startTime
+      }));
+    } catch (e) {
+      console.error('Auto-save error:', e);
+    }
+  }
+  
+  setTimeout(() => {
+    inputLock = false;
+    lastInputType = null; // Reset input type after lock expires
+  }, 30);
 }
 
 /* INPUT CONTROLS */
 spaceBtn.addEventListener('click', e => {
   e.preventDefault();
-  increment();
+  increment('mouse');
+});
+
+spaceBtn.addEventListener('touchstart', e => {
+  e.preventDefault();
+  increment('mouse');
 });
 
 document.addEventListener('keydown', e => {
-  if((e.code === 'Space' || e.key === ' ') && !lastSpace){
+  if ((e.code === 'Space' || e.key === ' ') && !lastSpace) {
     e.preventDefault();
     lastSpace = true;
-    increment();
+    increment('space');
   }
 });
 
 document.addEventListener('keyup', e => {
-  if(e.code === 'Space' || e.key === ' '){
+  if (e.code === 'Space' || e.key === ' ') {
     lastSpace = false;
   }
 });
 
 /* RESET BUTTON */
-resetBtn.addEventListener('click', () => {
-  if(playing) {
-    if(confirm('Are you sure you want to reset? Your current progress will be lost.')) {
+resetBtn.addEventListener('click', async () => {
+  if (soundEnabled) playSound('click');
+  
+  if (playing) {
+    const confirmed = await showConfirm(
+      'Reset Game',
+      'Are you sure you want to reset? Your current progress will be lost.'
+    );
+    
+    if (confirmed) {
       playing = false;
       count = 0;
       stamps = [];
+      inputLock = false;
+      lastInputType = null;
       countBox.textContent = '0';
+      countBox.setAttribute('aria-label', 'Current count: 0');
       countBox.style.width = '120px';
       endBtn.disabled = true;
       startBtn.disabled = false;
       spaceBtn.style.background = 'linear-gradient(145deg, var(--accent), #0ea5e9)';
       
-      if(timerInterval) {
+      if (timerInterval) {
         clearInterval(timerInterval);
         timerInterval = null;
       }
@@ -924,178 +1050,112 @@ resetBtn.addEventListener('click', () => {
       statPresses.textContent = '0';
       statRate.textContent = '0.0';
       statTime.textContent = '0s';
+      localStorage.removeItem('sp_current');
     }
   } else {
     count = 0;
+    inputLock = false;
+    lastInputType = null;
     countBox.textContent = '0';
+    countBox.setAttribute('aria-label', 'Current count: 0');
     countBox.style.width = '120px';
     spaceBtn.style.background = 'linear-gradient(145deg, var(--accent), #0ea5e9)';
     
     statPresses.textContent = '0';
     statRate.textContent = '0.0';
     statTime.textContent = '0s';
+    localStorage.removeItem('sp_current');
   }
 });
 
 /* END SESSION */
-let chartInstance = null;
-
 endBtn.addEventListener('click', () => {
-  if(!playing) return;
+  if (!playing) return;
   playing = false;
+  inputLock = false;
+  lastInputType = null;
   endBtn.disabled = true;
   startBtn.disabled = false;
   
-  if(timerInterval) {
+  if (timerInterval) {
     clearInterval(timerInterval);
     timerInterval = null;
   }
+  
+  if (soundEnabled) playSound('end');
   
   const duration_ms = Date.now() - startTime;
   const seconds = Math.floor(duration_ms / 1000);
   const timeText = Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
   const rate = (count / (duration_ms / 1000)).toFixed(1);
-  const player = (mainName.value.trim() || 'Anonymous');
-  const country = getRandomCountryCode();
+  const player = (mainName.value.trim() || 'Anonymous').substring(0, 50);
   
-  // CHECK ACHIEVEMENTS
-  checkAchievements('games', 1);
-  checkAchievements('score', count);
-  checkAchievements('time', seconds);
-  checkAchievements('rate', parseFloat(rate));
-  
-  // SAVE TO LOCAL STORAGE
-  if(player !== 'Anonymous'){
-    const arr = loadSubmissions();
-    arr.push({
-      name: player, 
-      presses: count, 
-      duration_ms, 
-      ts: Date.now(),
-      country: country
-    });
-    saveSubmissions(arr);
-    localStorage.setItem(LAST_NAME_KEY, player);
+  if (player !== 'Anonymous') {
+    try {
+      const arr = loadSubmissions();
+      arr.push({
+        name: player,
+        presses: count,
+        duration_ms,
+        ts: Date.now(),
+        country: userCountry
+      });
+      saveSubmissions(arr);
+      localStorage.setItem(LAST_NAME_KEY, player);
+      localStorage.removeItem('sp_current');
+    } catch (e) {
+      showNotification('Failed to save score locally', 'error');
+    }
   }
   
-  // CALCULATE RANK
-  let rankText = 'No rank (anonymous player)';
+  let rankText = '-';
   let rankNum = null;
-  if(player !== 'Anonymous'){
+  if (player !== 'Anonymous') {
     const named = getNamedSorted();
     const higher = named.filter(x => x.presses > count).length;
     const rank = higher + 1;
     rankNum = rank;
-    rankText = `#${rank} of ${named.length || 1}`;
+    rankText = `#${rank}`;
     
-    // Update stat rank
     statRank.textContent = `#${rank}`;
     
-    // Check rank achievement
-    if (rankNum <= 3) {
-      checkAchievements('rank', 4 - rankNum); // 3 for bronze, 2 for silver, 1 for gold
-    }
-    
-    // MOTIVATIONAL MESSAGES + CONFETTI
-    if(rankNum <= 10){
+    if (rankNum <= 10) {
       let msg = '';
-      if(rankNum === 1){
+      if (rankNum === 1) {
         msg = "🏆 CONGRATULATIONS! You're #1 in the world! Legendary!";
         createConfetti();
-      } else if(rankNum === 2){
+      } else if (rankNum === 2) {
         msg = "🔥 Amazing! You're #2 globally! So close to the top!";
         createConfetti();
-      } else if(rankNum === 3){
+      } else if (rankNum === 3) {
         msg = "⭐ Fantastic! You're #3 worldwide! Top tier performance!";
         createConfetti();
       } else {
         msg = `🎯 Excellent! You're #${rankNum} globally! Top 10 achiever!`;
       }
-      setTimeout(() => alert(msg), 300);
+      setTimeout(() => showNotification(msg, 'success'), 300);
     }
   }
   
-  // UPDATE RESULT MODAL
-  resName.textContent = player + ' ' + (player !== 'Anonymous' ? countryFlags[country] : '');
-  resPresses.textContent = String(count);
+  resName.innerHTML = escapeHtml(player) + (player !== 'Anonymous' ? 
+    ` <img src="${countryFlags[userCountry]}" class="player-flag" alt="${countryNames[userCountry]}">` : '');
+  resPresses.textContent = count;
   resTime.textContent = timeText;
   resRate.textContent = rate + '/sec';
   resRank.textContent = rankText;
   
-  // UPDATE LEADERBOARD
   const top = getNamedSorted().slice(0, 10);
-  leaderboardEl.innerHTML = '';
-  if(!top.length){
-    leaderboardEl.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">No named submissions yet</div>';
-  } else {
-    top.forEach((p,i) => {
-      const d = document.createElement('div');
-      d.className = 'top-item';
-      d.innerHTML = `
-        <div class="rank">#${i+1}</div>
-        <div class="name">
-          <span class="flag">${p.country ? countryFlags[p.country] : '🏴'}</span>
-          ${escapeHtml(p.name)}
-        </div>
-        <div class="score">${p.presses}</div>
-      `;
-      leaderboardEl.appendChild(d);
-    });
-  }
+  updateLeaderboard(leaderboardEl, top);
   
-  // CHART
-  try {
-    resultChart.style.display = 'block';
-    const ctx = resultChart.getContext('2d');
-    if(chartInstance){
-      chartInstance.destroy();
-      chartInstance = null;
-    }
-    chartInstance = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: stamps.map((_,i) => i+1),
-        datasets: [{
-          label: 'Time between presses (ms)',
-          data: stamps.map((stamp, i) => i === 0 ? stamp : stamp - stamps[i-1]),
-          borderColor: document.body.getAttribute('data-theme') === 'matrix' ? '#00ff41' : '#06b6d4',
-          backgroundColor: document.body.getAttribute('data-theme') === 'matrix' ? 'rgba(0, 255, 65, 0.12)' : 'rgba(6, 182, 212, 0.12)',
-          tension: 0.25,
-          fill: true
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: { 
-            beginAtZero: true,
-            grid: { color: 'rgba(255,255,255,0.1)' },
-            ticks: { color: 'var(--muted)' }
-          },
-          x: {
-            grid: { color: 'rgba(255,255,255,0.1)' },
-            ticks: { color: 'var(--muted)' }
-          }
-        },
-        plugins: {
-          legend: { labels: { color: 'var(--muted)' } }
-        }
-      }
-    });
-  } catch(e) {
-    console.warn('Chart error:', e);
-  }
+  showModal(resultModal, restartGame);
   
-  resultModal.style.display = 'flex';
-  
-  // API SYNC
   const payload = {
     name: player,
     presses: count,
     duration_ms,
-    stamps,
+    stamps: stamps.slice(-50),
     ts: Date.now(),
-    country: country
+    country: userCountry
   };
   enqueuePayload(payload);
   
@@ -1106,83 +1166,149 @@ endBtn.addEventListener('click', () => {
 resultClose.addEventListener('click', () => {
   resultModal.style.display = 'none';
   count = 0;
+  inputLock = false;
+  lastInputType = null;
   countBox.textContent = '0';
+  countBox.setAttribute('aria-label', 'Current count: 0');
   stamps = [];
   endBtn.disabled = true;
   startBtn.disabled = false;
   spaceBtn.style.background = 'linear-gradient(145deg, var(--accent), #0ea5e9)';
+  localStorage.removeItem('sp_current');
 });
 
-/* API QUEUE SYSTEM */
-function enqueuePayload(payload){
-  if(!API_ENDPOINT) return;
-  const q = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
-  q.push({payload, tries:0, nextTry: Date.now()});
-  localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
-  processQueue();
-}
+/* RESTART GAME BUTTON */
+restartGame.addEventListener('click', () => {
+  if (soundEnabled) playSound('restart');
+  
+  resultModal.style.display = 'none';
+  count = 0;
+  inputLock = false;
+  lastInputType = null;
+  countBox.textContent = '0';
+  countBox.setAttribute('aria-label', 'Current count: 0');
+  stamps = [];
+  endBtn.disabled = true;
+  startBtn.disabled = false;
+  spaceBtn.style.background = 'linear-gradient(145deg, var(--accent), #0ea5e9)';
+  localStorage.removeItem('sp_current');
+  
+  setTimeout(() => {
+    const nm = mainName.value.trim();
+    if (nm) {
+      beginSession(nm);
+    } else {
+      startBtn.disabled = false;
+    }
+  }, 500);
+});
 
-async function processQueue(){
-  if(!API_ENDPOINT) return;
-  const q = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
-  if(!q.length) return;
-  const now = Date.now();
-  for(let i=0; i<q.length; i++){
-    const item = q[i];
-    if(item.nextTry > now) continue;
+/* SOUND TOGGLE */
+soundToggle.addEventListener('click', () => {
+  soundEnabled = !soundEnabled;
+  soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+  soundToggle.setAttribute('aria-label', soundEnabled ? 'Turn off sound effects' : 'Turn on sound effects');
+  localStorage.setItem('sp_sound_enabled', soundEnabled.toString());
+  if (soundEnabled) playSound('click');
+});
+
+/* INITIALIZATION */
+function initApp() {
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  if (savedTheme) {
+    document.body.setAttribute('data-theme', savedTheme);
+    document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`.theme-btn[data-theme="${savedTheme}"]`).classList.add('active');
+  } else {
+    applySystemTheme();
+  }
+  
+  const savedCountry = localStorage.getItem(USER_COUNTRY_KEY) || 'IN';
+  const savedSound = localStorage.getItem('sp_sound_enabled');
+  
+  userCountry = savedCountry;
+  countrySelect.value = savedCountry;
+  updateCountryFlag();
+  
+  if (savedSound !== null) {
+    soundEnabled = savedSound === 'true';
+    soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+    soundToggle.setAttribute('aria-label', soundEnabled ? 'Turn off sound effects' : 'Turn on sound effects');
+  }
+  
+  initAudio();
+  updateLeaderboardPreview();
+  createParticles();
+  
+  const savedGame = localStorage.getItem('sp_current');
+  if (savedGame) {
     try {
-      if(navigator.sendBeacon){
-        const blob = new Blob([JSON.stringify(item.payload)], {type:'application/json'});
-        const ok = navigator.sendBeacon(API_ENDPOINT, blob);
-        if(ok){ q.splice(i,1); i--; continue; }
+      const { name, count: savedCount, stamps: savedStamps, startTime: savedStart } = JSON.parse(savedGame);
+      if (name && savedCount > 0 && savedStamps.length > 0 && savedStart) {
+        mainName.value = name;
+        count = savedCount;
+        stamps = savedStamps;
+        startTime = savedStart;
+        playing = true;
+        countBox.textContent = String(count);
+        countBox.setAttribute('aria-label', `Current count: ${count}`);
+        countBox.style.width = Math.max(120, 100 + String(count).length * 18) + 'px';
+        endBtn.disabled = false;
+        startBtn.disabled = true;
+        timerInterval = setInterval(updateStats, 200);
+        updateStats();
+        showNotification('Resumed your previous game!', 'success');
       }
-      const resp = await fetch(API_ENDPOINT, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(item.payload),
-        keepalive:true
-      });
-      if(resp.ok){ q.splice(i,1); i--; continue; }
-      item.tries = (item.tries||0) + 1;
-      item.nextTry = Date.now() + Math.min(3600000, Math.pow(2, item.tries) * 1000);
-    } catch(err){
-      item.tries = (item.tries||0) + 1;
-      item.nextTry = Date.now() + Math.min(3600000, Math.pow(2, item.tries) * 1000);
+    } catch (e) {
+      console.error('Error loading saved game:', e);
+      localStorage.removeItem('sp_current');
     }
   }
-  localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
-  setTimeout(processQueue, 5000);
-}
-
-/* LEADERBOARD FUNCTIONS */
-function getNamedSorted(){
-  const arr = loadSubmissions();
-  return arr.filter(x => x.name && x.name !== 'Anonymous')
-           .sort((a,b) => b.presses - a.presses || a.duration_ms - b.duration_ms);
-}
-
-function updateLeaderboardPreview(){
-  const top = getNamedSorted().slice(0,10);
-  leaderboardPreview.innerHTML = '';
-  if(!top.length){
-    leaderboardPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">No named submissions yet. Be the first!</div>';
-    return;
+  
+  const q = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
+  if (q.length > 0 && API_ENDPOINT && !API_ENDPOINT.includes('api.x.ai')) {
+    processQueue();
+    setInterval(processQueue, 30000);
   }
-  top.forEach((p,i) => {
-    const div = document.createElement('div');
-    div.className = 'top-item';
-    div.innerHTML = `
-      <div class="rank">#${i+1}</div>
-      <div class="name">
-        <span class="flag">${p.country ? countryFlags[p.country] : '🏴'}</span>
-        ${escapeHtml(p.name)}
-      </div>
-      <div class="score">${p.presses}</div>
-    `;
-    leaderboardPreview.appendChild(div);
+}
+
+/* SERVICE WORKER REGISTRATION */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('SW registered: ', registration);
+      })
+      .catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
   });
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  const last = localStorage.getItem(LAST_NAME_KEY);
+  if (last) mainName.value = last;
+  
+  initApp();
+});
+
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+resultModal.addEventListener('click', (e) => {
+  if (e.target === resultModal) {
+    resultModal.style.display = 'none';
+  }
+});
+
+customConfirm.addEventListener('click', (e) => {
+  if (e.target === customConfirm) {
+    customConfirm.style.display = 'none';
+  }
+});
 </script>
 </body>
 </html>
-
